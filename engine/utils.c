@@ -33,7 +33,6 @@
 #include "sgftree.h"
 #include "random.h"
 #include "gg_utils.h"
-#include "patterns.h"
 
 
 

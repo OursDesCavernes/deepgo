@@ -49,8 +49,6 @@ init_gnugo(float memory, unsigned int seed)
   set_random_seed(seed);
   clear_board();
 
-  transformation_init();
-
   clear_approxlib_cache();
   clear_accuratelib_cache();
 }

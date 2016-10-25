@@ -24,7 +24,6 @@
 #include "gnugo.h"
 
 #include "liberty.h"
-#include "patterns.h"
 #include "random.h"
 
 /* ================================================================ */

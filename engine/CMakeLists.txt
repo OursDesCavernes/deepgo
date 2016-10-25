@@ -1,5 +1,4 @@
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
-INCLUDE_DIRECTORIES(${DeepGo_SOURCE_DIR}/patterns)
 INCLUDE_DIRECTORIES(${DeepGo_SOURCE_DIR}/sgf)
 INCLUDE_DIRECTORIES(${DeepGo_SOURCE_DIR}/utils)
 
@@ -22,7 +21,6 @@ SET(engine_STAT_SRCS
     printutils.c
     reading.c
     sgffile.c
-    shapes.c
     showbord.c
     unconditional.c
     utils.c
