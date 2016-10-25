@@ -46,95 +46,56 @@ static void rotate_on_output(int ai, int aj, int *bi, int *bj);
 
 #define DECLARE(func) static int func(char *s)
 
-DECLARE(gtp_aa_confirm_safety);
 DECLARE(gtp_accurate_approxlib);
 DECLARE(gtp_accuratelib);
 DECLARE(gtp_advance_random_seed);
 DECLARE(gtp_all_legal);
 DECLARE(gtp_all_move_values);
-DECLARE(gtp_analyze_eyegraph);
-DECLARE(gtp_analyze_semeai);
-DECLARE(gtp_analyze_semeai_after_move);
 DECLARE(gtp_attack);
 DECLARE(gtp_attack_either);
-DECLARE(gtp_block_off);
-DECLARE(gtp_break_in);
 DECLARE(gtp_captures);
 DECLARE(gtp_clear_board);
 DECLARE(gtp_clear_cache);
-DECLARE(gtp_combination_attack);
-DECLARE(gtp_combination_defend);
-DECLARE(gtp_connect);
 DECLARE(gtp_countlib);
 DECLARE(gtp_cputime);
 DECLARE(gtp_decrease_depths);
 DECLARE(gtp_defend);
-DECLARE(gtp_defend_both);
-DECLARE(gtp_disconnect);
-DECLARE(gtp_does_attack);
-DECLARE(gtp_does_defend);
-DECLARE(gtp_does_surround);
 DECLARE(gtp_dragon_data);
-DECLARE(gtp_dragon_status);
 DECLARE(gtp_dragon_stones);
-DECLARE(gtp_draw_search_area);
 DECLARE(gtp_dump_stack);
 DECLARE(gtp_echo);
 DECLARE(gtp_echo_err);
 DECLARE(gtp_estimate_score);
-DECLARE(gtp_eval_eye);
-DECLARE(gtp_experimental_score);
-DECLARE(gtp_eye_data);
 DECLARE(gtp_final_score);
-DECLARE(gtp_final_status);
-DECLARE(gtp_final_status_list);
 DECLARE(gtp_findlib);
 DECLARE(gtp_finish_sgftrace);
 DECLARE(gtp_fixed_handicap);
-DECLARE(gtp_followup_influence);
 DECLARE(gtp_genmove);
 DECLARE(gtp_genmove_black);
 DECLARE(gtp_genmove_white);
-DECLARE(gtp_get_connection_node_counter);
 DECLARE(gtp_get_handicap);
 DECLARE(gtp_get_komi);
 DECLARE(gtp_get_life_node_counter);
-DECLARE(gtp_get_owl_node_counter);
 DECLARE(gtp_get_random_seed);
 DECLARE(gtp_get_reading_node_counter);
 DECLARE(gtp_get_trymove_counter);
 DECLARE(gtp_gg_genmove);
 DECLARE(gtp_gg_undo);
-DECLARE(gtp_half_eye_data);
 DECLARE(gtp_increase_depths);
-DECLARE(gtp_initial_influence);
 DECLARE(gtp_invariant_hash);
 DECLARE(gtp_invariant_hash_for_moves);
 DECLARE(gtp_is_legal);
-DECLARE(gtp_is_surrounded);
 DECLARE(gtp_kgs_genmove_cleanup);
 DECLARE(gtp_known_command);
 DECLARE(gtp_ladder_attack);
 DECLARE(gtp_last_move);
-DECLARE(gtp_limit_search);
 DECLARE(gtp_list_commands);
 DECLARE(gtp_list_stones);
 DECLARE(gtp_loadsgf);
-DECLARE(gtp_move_influence);
 DECLARE(gtp_move_probabilities);
-DECLARE(gtp_move_reasons);
 DECLARE(gtp_move_uncertainty);
 DECLARE(gtp_move_history);
 DECLARE(gtp_name);
-DECLARE(gtp_owl_attack);
-DECLARE(gtp_owl_connection_defends);
-DECLARE(gtp_owl_defend);
-DECLARE(gtp_owl_does_attack);
-DECLARE(gtp_owl_does_defend);
-DECLARE(gtp_owl_substantial);
-DECLARE(gtp_owl_threaten_attack);
-DECLARE(gtp_owl_threaten_defense);
-DECLARE(gtp_place_free_handicap);
 DECLARE(gtp_play);
 DECLARE(gtp_playblack);
 DECLARE(gtp_playwhite);
@@ -147,26 +108,18 @@ DECLARE(gtp_query_orientation);
 DECLARE(gtp_quit);
 DECLARE(gtp_reg_genmove);
 DECLARE(gtp_report_uncertainty);
-DECLARE(gtp_reset_connection_node_counter);
 DECLARE(gtp_reset_life_node_counter);
-DECLARE(gtp_reset_owl_node_counter);
 DECLARE(gtp_reset_reading_node_counter);
-DECLARE(gtp_reset_search_mask);
 DECLARE(gtp_reset_trymove_counter);
 DECLARE(gtp_restricted_genmove);
 DECLARE(gtp_same_dragon);
 DECLARE(gtp_set_boardsize);
-DECLARE(gtp_set_free_handicap);
 DECLARE(gtp_set_komi);
 DECLARE(gtp_set_level);
 DECLARE(gtp_set_orientation);
 DECLARE(gtp_set_random_seed);
-DECLARE(gtp_set_search_diamond);
-DECLARE(gtp_set_search_limit);
 DECLARE(gtp_showboard);
 DECLARE(gtp_start_sgftrace);
-DECLARE(gtp_surround_map);
-DECLARE(gtp_test_eyeshape);
 DECLARE(gtp_time_left);
 DECLARE(gtp_time_settings);
 DECLARE(gtp_top_moves);
@@ -175,112 +128,67 @@ DECLARE(gtp_top_moves_white);
 DECLARE(gtp_tryko);
 DECLARE(gtp_trymove);
 DECLARE(gtp_tune_move_ordering);
-DECLARE(gtp_unconditional_status);
 DECLARE(gtp_undo);
 DECLARE(gtp_what_color);
-DECLARE(gtp_worm_cutstone);
-DECLARE(gtp_worm_data);
-DECLARE(gtp_worm_stones);
 
 /* List of known commands. */
 static struct gtp_command commands[] = {
-  {"aa_confirm_safety",       gtp_aa_confirm_safety},
   {"accurate_approxlib",      gtp_accurate_approxlib},
   {"accuratelib",             gtp_accuratelib},
   {"advance_random_seed",     gtp_advance_random_seed},
   {"all_legal",        	      gtp_all_legal},
   {"all_move_values",         gtp_all_move_values},
-  {"analyze_eyegraph", 	      gtp_analyze_eyegraph},
-  {"analyze_semeai",          gtp_analyze_semeai},
-  {"analyze_semeai_after_move", gtp_analyze_semeai_after_move},
   {"attack",           	      gtp_attack},
   {"attack_either",           gtp_attack_either},
   {"black",            	      gtp_playblack},
-  {"block_off",		      gtp_block_off},
   {"boardsize",        	      gtp_set_boardsize},
-  {"break_in",		      gtp_break_in},
   {"captures",        	      gtp_captures},
   {"clear_board",      	      gtp_clear_board},
   {"clear_cache",	      gtp_clear_cache},
   {"color",            	      gtp_what_color},
-  {"combination_attack",      gtp_combination_attack},
-  {"combination_defend",      gtp_combination_defend},
-  {"connect",         	      gtp_connect},
   {"countlib",         	      gtp_countlib},
   {"cputime",		      gtp_cputime},
   {"decrease_depths",  	      gtp_decrease_depths},
   {"defend",           	      gtp_defend},
-  {"defend_both",	      gtp_defend_both},
-  {"disconnect",       	      gtp_disconnect},
-  {"does_attack",             gtp_does_attack},
-  {"does_defend",             gtp_does_defend},
-  {"does_surround",           gtp_does_surround},
-  {"dragon_data",             gtp_dragon_data},
-  {"dragon_status",    	      gtp_dragon_status},
-  {"dragon_stones",           gtp_dragon_stones},
-  {"draw_search_area",        gtp_draw_search_area},
   {"dump_stack",       	      gtp_dump_stack},
   {"echo" ,                   gtp_echo},
   {"echo_err" ,               gtp_echo_err},
   {"estimate_score",          gtp_estimate_score},
-  {"eval_eye",         	      gtp_eval_eye},
-  {"experimental_score",      gtp_experimental_score},
-  {"eye_data",                gtp_eye_data},
   {"final_score",             gtp_final_score},
-  {"final_status",            gtp_final_status},
-  {"final_status_list",       gtp_final_status_list},
   {"findlib",          	      gtp_findlib},
   {"finish_sgftrace",  	      gtp_finish_sgftrace},
   {"fixed_handicap",   	      gtp_fixed_handicap},
-  {"followup_influence",      gtp_followup_influence},
   {"genmove",                 gtp_genmove},
   {"genmove_black",           gtp_genmove_black},
   {"genmove_white",           gtp_genmove_white},
-  {"get_connection_node_counter", gtp_get_connection_node_counter},
   {"get_handicap",   	      gtp_get_handicap},
   {"get_komi",        	      gtp_get_komi},
   {"get_life_node_counter",   gtp_get_life_node_counter},
-  {"get_owl_node_counter",    gtp_get_owl_node_counter},
   {"get_random_seed",  	      gtp_get_random_seed},
   {"get_reading_node_counter", gtp_get_reading_node_counter},
   {"get_trymove_counter",     gtp_get_trymove_counter},
   {"gg-undo",                 gtp_gg_undo},
   {"gg_genmove",              gtp_gg_genmove},
-  {"half_eye_data",           gtp_half_eye_data},
   {"help",                    gtp_list_commands},
   {"increase_depths",  	      gtp_increase_depths},
-  {"initial_influence",       gtp_initial_influence},
   {"invariant_hash_for_moves",gtp_invariant_hash_for_moves},
   {"invariant_hash",   	      gtp_invariant_hash},
   {"is_legal",         	      gtp_is_legal},
-  {"is_surrounded",           gtp_is_surrounded},
   {"kgs-genmove_cleanup",     gtp_kgs_genmove_cleanup},
   {"known_command",    	      gtp_known_command},
   {"komi",        	      gtp_set_komi},
   {"ladder_attack",    	      gtp_ladder_attack},
   {"last_move",    	      gtp_last_move},
   {"level",        	      gtp_set_level},
-  {"limit_search",     	      gtp_limit_search},
   {"list_commands",    	      gtp_list_commands},
   {"list_stones",    	      gtp_list_stones},
   {"loadsgf",          	      gtp_loadsgf},
-  {"move_influence",          gtp_move_influence},
   {"move_probabilities",      gtp_move_probabilities},
-  {"move_reasons",            gtp_move_reasons},
   {"move_uncertainty",	      gtp_move_uncertainty},
   {"move_history",	      gtp_move_history},
   {"name",                    gtp_name},
   {"new_score",               gtp_estimate_score},
   {"orientation",     	      gtp_set_orientation},
-  {"owl_attack",     	      gtp_owl_attack},
-  {"owl_connection_defends",  gtp_owl_connection_defends},
-  {"owl_defend",     	      gtp_owl_defend},
-  {"owl_does_attack", 	      gtp_owl_does_attack},
-  {"owl_does_defend", 	      gtp_owl_does_defend},
-  {"owl_substantial", 	      gtp_owl_substantial},
-  {"owl_threaten_attack",     gtp_owl_threaten_attack},
-  {"owl_threaten_defense",    gtp_owl_threaten_defense},
-  {"place_free_handicap",     gtp_place_free_handicap},
   {"play",            	      gtp_play},
   {"popgo",            	      gtp_popgo},
   {"printsgf",         	      gtp_printsgf},
@@ -290,22 +198,13 @@ static struct gtp_command commands[] = {
   {"quit",             	      gtp_quit},
   {"reg_genmove",             gtp_reg_genmove},
   {"report_uncertainty",      gtp_report_uncertainty},
-  {"reset_connection_node_counter", gtp_reset_connection_node_counter},
   {"reset_life_node_counter", gtp_reset_life_node_counter},
-  {"reset_owl_node_counter",  gtp_reset_owl_node_counter},
   {"reset_reading_node_counter", gtp_reset_reading_node_counter},
-  {"reset_search_mask",       gtp_reset_search_mask},
   {"reset_trymove_counter",   gtp_reset_trymove_counter},
   {"restricted_genmove",      gtp_restricted_genmove},
-  {"same_dragon",    	      gtp_same_dragon},
-  {"set_free_handicap",       gtp_set_free_handicap},
   {"set_random_seed",  	      gtp_set_random_seed},
-  {"set_search_diamond",      gtp_set_search_diamond},
-  {"set_search_limit",        gtp_set_search_limit},
   {"showboard",        	      gtp_showboard},
   {"start_sgftrace",  	      gtp_start_sgftrace},
-  {"surround_map",            gtp_surround_map},
-  {"test_eyeshape",           gtp_test_eyeshape},
   {"time_left",               gtp_time_left},
   {"time_settings",           gtp_time_settings},
   {"top_moves",               gtp_top_moves},
@@ -314,13 +213,9 @@ static struct gtp_command commands[] = {
   {"tryko",          	      gtp_tryko},
   {"trymove",          	      gtp_trymove},
   {"tune_move_ordering",      gtp_tune_move_ordering},
-  {"unconditional_status",    gtp_unconditional_status},
   {"undo",                    gtp_undo},
   {"version",                 gtp_program_version},
   {"white",            	      gtp_playwhite},
-  {"worm_cutstone",           gtp_worm_cutstone},
-  {"worm_data",               gtp_worm_data},
-  {"worm_stones",             gtp_worm_stones},
   {NULL,                      NULL}
 };
 
@@ -716,90 +611,6 @@ gtp_fixed_handicap(char *s)
       }
   
   return gtp_finish_response();
-}
-
-
-/* Function:  Choose free placement handicap stones and put them on the board.
- * Arguments: number of handicap stones
- * Fails:     invalid number of stones
- * Returns:   list of vertices with handicap stones
- *
- * Status:    GTP version 2 standard command.
- */
-static int
-gtp_place_free_handicap(char *s)
-{
-  int m, n;
-  int first = 1;
-  int this_handicap;
-  if (sscanf(s, "%d", &this_handicap) < 1)
-    return gtp_failure("handicap not an integer");
-  
-  if (stones_on_board(BLACK | WHITE) > 0)
-    return gtp_failure("board not empty");
-
-  if (this_handicap < 2)
-    return gtp_failure("invalid handicap");
-
-  handicap = place_free_handicap(this_handicap);
-
-  gtp_start_response(GTP_SUCCESS);
-
-  for (m = 0; m < board_size; m++)
-    for (n = 0; n < board_size; n++)
-      if (BOARD(m, n) != EMPTY) {
-	if (!first)
-	  gtp_printf(" ");
-	else
-	  first = 0;
-	gtp_mprintf("%m", m, n);
-      }
-  
-  return gtp_finish_response();
-}
-
-
-/* Function:  Put free placement handicap stones on the board.
- * Arguments: list of vertices with handicap stones
- * Fails:     board not empty, bad list of vertices
- * Returns:   nothing
- *
- * Status:    GTP version 2 standard command.
- */
-static int
-gtp_set_free_handicap(char *s)
-{
-  int n;
-  int i, j;
-  int k;
-  
-  if (stones_on_board(BLACK | WHITE) > 0)
-    return gtp_failure("board not empty");
-
-  for (k = 0; k < MAX_BOARD * MAX_BOARD; k++) {
-    n = gtp_decode_coord(s, &i, &j);
-    if (n > 0) {
-      if (board[POS(i, j)] != EMPTY) {
-	clear_board();
-	return gtp_failure("repeated vertex");
-      }
-      add_stone(POS(i, j), BLACK);
-      s += n;
-    }
-    else if (sscanf(s, "%*s") != EOF)
-      return gtp_failure("invalid coordinate");
-    else
-      break;
-  }
-
-  if (k < 2) {
-    clear_board();
-    return gtp_failure("invalid handicap");
-  }
-
-  handicap = k;
-  
-  return gtp_success("");
 }
 
 
@@ -1264,7 +1075,6 @@ static int
 gtp_clear_cache(char *s)
 {
   UNUSED(s);
-  clear_persistent_caches();
   reading_cache_clear();
   return gtp_success("");
 }
@@ -1368,82 +1178,6 @@ gtp_defend(char *s)
 }  
 
 
-/* Function:  Examine whether a specific move attacks a string tactically.
- * Arguments: vertex (move), vertex (dragon)
- * Fails:     invalid vertex, empty vertex
- * Returns:   attack code
- */
-static int
-gtp_does_attack(char *s)
-{
-  int i, j;
-  int ti, tj;
-  int attack_code;
-  int n;
-
-  n = gtp_decode_coord(s, &ti, &tj);
-  if (n == 0)
-    return gtp_failure("invalid coordinate");
-
-  if (BOARD(ti, tj) != EMPTY)
-    return gtp_failure("move vertex must be empty");
-
-  n = gtp_decode_coord(s + n, &i, &j);
-  if (n == 0)
-    return gtp_failure("invalid coordinate");
-
-  if (BOARD(i, j) == EMPTY)
-    return gtp_failure("string vertex must not be empty");
-
-  /* to get the variations into the sgf file, clear the reading cache */
-  if (sgf_dumptree)
-    reading_cache_clear();
-  
-  attack_code = does_attack(POS(ti, tj), POS(i, j));
-  gtp_start_response(GTP_SUCCESS);
-  gtp_print_code(attack_code);
-  return gtp_finish_response();
-}  
-
-
-/* Function:  Examine whether a specific move defends a string tactically.
- * Arguments: vertex (move), vertex (dragon)
- * Fails:     invalid vertex, empty vertex
- * Returns:   attack code
- */
-static int
-gtp_does_defend(char *s)
-{
-  int i, j;
-  int ti, tj;
-  int defense_code;
-  int n;
-
-  n = gtp_decode_coord(s, &ti, &tj);
-  if (n == 0)
-    return gtp_failure("invalid coordinate");
-
-  if (BOARD(ti, tj) != EMPTY)
-    return gtp_failure("move vertex must be empty");
-
-  n = gtp_decode_coord(s + n, &i, &j);
-  if (n == 0)
-    return gtp_failure("invalid coordinate");
-
-  if (BOARD(i, j) == EMPTY)
-    return gtp_failure("string vertex must not be empty");
-
-  /* to get the variations into the sgf file, clear the reading cache */
-  if (sgf_dumptree)
-    reading_cache_clear();
-  
-  defense_code = does_defend(POS(ti, tj), POS(i, j));
-  gtp_start_response(GTP_SUCCESS);
-  gtp_print_code(defense_code);
-  return gtp_finish_response();
-}  
-
-
 /* Function:  Try to attack a string strictly in a ladder.
  * Arguments: vertex
  * Fails:     invalid vertex, empty vertex
@@ -1502,907 +1236,6 @@ gtp_decrease_depths(char *s)
   decrease_depth_values();
   return gtp_success("");
 }  
-
-
-/******************
- * owl reading. *
- ******************/
-
-/* Function:  Try to attack a dragon.
- * Arguments: vertex
- * Fails:     invalid vertex, empty vertex
- * Returns:   attack code followed by attack point if attack code nonzero.
- */
-static int
-gtp_owl_attack(char *s)
-{
-  int i, j;
-  int attack_point;
-  int attack_code;
-  int result_certain;
-  int kworm;
-
-  if (!gtp_decode_coord(s, &i, &j))
-    return gtp_failure("invalid coordinate");
-
-  if (BOARD(i, j) == EMPTY)
-    return gtp_failure("vertex must not be empty");
-
-  silent_examine_position(EXAMINE_DRAGONS_WITHOUT_OWL);
-  
-  attack_code = owl_attack(POS(i, j), &attack_point, &result_certain, &kworm);
-  gtp_start_response(GTP_SUCCESS);
-  gtp_print_code(attack_code);
-  if (attack_code > 0) {
-    gtp_printf(" ");
-    gtp_print_vertex(I(attack_point), J(attack_point));
-  }
-  if (!result_certain && report_uncertainty)
-    gtp_printf(" uncertain");
-  return gtp_finish_response();
-}  
-
-
-/* Function:  Try to defend a dragon.
- * Arguments: vertex
- * Fails:     invalid vertex, empty vertex
- * Returns:   defense code followed by defense point if defense code nonzero.
- */
-static int
-gtp_owl_defend(char *s)
-{
-  int i, j;
-  int defense_point;
-  int defend_code;
-  int result_certain;
-  int kworm;
-  
-  if (!gtp_decode_coord(s, &i, &j))
-    return gtp_failure("invalid coordinate");
-
-  if (BOARD(i, j) == EMPTY)
-    return gtp_failure("vertex must not be empty");
-
-  silent_examine_position(EXAMINE_DRAGONS_WITHOUT_OWL);
-  
-  defend_code = owl_defend(POS(i, j), &defense_point, &result_certain, &kworm);
-  gtp_start_response(GTP_SUCCESS);
-  gtp_print_code(defend_code);
-  if (defend_code > 0) {
-    gtp_printf(" ");
-    gtp_print_vertex(I(defense_point), J(defense_point));
-  }
-  if (!result_certain && report_uncertainty)
-    gtp_printf(" uncertain");
-  return gtp_finish_response();
-}  
-
-/* Function:  Try to attack a dragon in 2 moves.
- * Arguments: vertex
- * Fails:     invalid vertex, empty vertex
- * Returns:   attack code followed by the two attack points if
- *            attack code nonzero.
- */
-static int
-gtp_owl_threaten_attack(char *s)
-{
-  int i, j;
-  int attack_point1;
-  int attack_point2;
-  int attack_code;
-
-  if (!gtp_decode_coord(s, &i, &j))
-    return gtp_failure("invalid coordinate");
-
-  if (BOARD(i, j) == EMPTY)
-    return gtp_failure("vertex must not be empty");
-
-  silent_examine_position(EXAMINE_DRAGONS_WITHOUT_OWL);
-  
-  attack_code = owl_threaten_attack(POS(i, j), &attack_point1, &attack_point2);
-  gtp_start_response(GTP_SUCCESS);
-  gtp_print_code(attack_code);
-  if (attack_code > 0) {
-    gtp_printf(" ");
-    gtp_print_vertex(I(attack_point1), J(attack_point1));
-    gtp_printf(" ");
-    gtp_print_vertex(I(attack_point2), J(attack_point2));
-  }
-  return gtp_finish_response();
-}  
-
-
-/* Function:  Try to defend a dragon with 2 moves.
- * Arguments: vertex
- * Fails:     invalid vertex, empty vertex
- * Returns:   defense code followed by the 2 defense points if
- *            defense code nonzero.
- */
-static int
-gtp_owl_threaten_defense(char *s)
-{
-  int i, j;
-  int defense_point1;
-  int defense_point2;
-  int defend_code;
-  
-  if (!gtp_decode_coord(s, &i, &j))
-    return gtp_failure("invalid coordinate");
-
-  if (BOARD(i, j) == EMPTY)
-    return gtp_failure("vertex must not be empty");
-
-  silent_examine_position(EXAMINE_DRAGONS_WITHOUT_OWL);
-  
-  defend_code = owl_threaten_defense(POS(i, j), &defense_point1,
-				     &defense_point2);
-  gtp_start_response(GTP_SUCCESS);
-  gtp_print_code(defend_code);
-  if (defend_code > 0) {
-    gtp_printf(" ");
-    gtp_print_vertex(I(defense_point1), J(defense_point1));
-    gtp_printf(" ");
-    gtp_print_vertex(I(defense_point2), J(defense_point2));
-  }
-  return gtp_finish_response();
-}  
-
-
-/* Function:  Examine whether a specific move attacks a dragon.
- * Arguments: vertex (move), vertex (dragon)
- * Fails:     invalid vertex, empty vertex
- * Returns:   attack code
- */
-static int
-gtp_owl_does_attack(char *s)
-{
-  int i, j;
-  int ti, tj;
-  int attack_code;
-  int kworm;
-  int n;
-
-  n = gtp_decode_coord(s, &ti, &tj);
-  if (n == 0)
-    return gtp_failure("invalid coordinate");
-
-  if (BOARD(ti, tj) != EMPTY)
-    return gtp_failure("move vertex must be empty");
-
-  n = gtp_decode_coord(s + n, &i, &j);
-  if (n == 0)
-    return gtp_failure("invalid coordinate");
-
-  if (BOARD(i, j) == EMPTY)
-    return gtp_failure("dragon vertex must not be empty");
-
-  silent_examine_position(EXAMINE_DRAGONS_WITHOUT_OWL);
-  
-  attack_code = owl_does_attack(POS(ti, tj), POS(i, j), &kworm);
-  gtp_start_response(GTP_SUCCESS);
-  gtp_print_code(attack_code);
-  return gtp_finish_response();
-}  
-
-
-/* Function:  Examine whether a specific move defends a dragon.
- * Arguments: vertex (move), vertex (dragon)
- * Fails:     invalid vertex, empty vertex
- * Returns:   defense code
- */
-static int
-gtp_owl_does_defend(char *s)
-{
-  int i, j;
-  int ti, tj;
-  int defense_code;
-  int kworm;
-  int n;
-
-  n = gtp_decode_coord(s, &ti, &tj);
-  if (n == 0)
-    return gtp_failure("invalid coordinate");
-
-  if (BOARD(ti, tj) != EMPTY)
-    return gtp_failure("move vertex must be empty");
-
-  n = gtp_decode_coord(s + n, &i, &j);
-  if (n == 0)
-    return gtp_failure("invalid coordinate");
-
-  if (BOARD(i, j) == EMPTY)
-    return gtp_failure("dragon vertex must not be empty");
-
-  silent_examine_position(EXAMINE_DRAGONS_WITHOUT_OWL);
-  
-  defense_code = owl_does_defend(POS(ti, tj), POS(i, j), &kworm);
-  gtp_start_response(GTP_SUCCESS);
-  gtp_print_code(defense_code);
-  return gtp_finish_response();
-}  
-
-
-/* Function:  Examine whether a connection defends involved dragons.
- * Arguments: vertex (move), vertex (dragon1), vertex (dragon2)
- * Fails:     invalid vertex, empty vertex
- * Returns:   defense code
- */
-static int
-gtp_owl_connection_defends(char *s)
-{
-  int ai, aj;
-  int bi, bj;
-  int ti, tj;
-  int defense_code;
-  int n;
-
-  n = gtp_decode_coord(s, &ti, &tj);
-  if (n == 0)
-    return gtp_failure("invalid coordinate");
-
-  if (BOARD(ti, tj) != EMPTY)
-    return gtp_failure("move vertex must be empty");
-
-  s += n;
-  n = gtp_decode_coord(s, &ai, &aj);
-  if (n == 0)
-    return gtp_failure("invalid coordinate");
-
-  s += n;
-  n = gtp_decode_coord(s, &bi, &bj);
-  if (n == 0)
-    return gtp_failure("invalid coordinate");
-
-  if (BOARD(ai, aj) == EMPTY || BOARD(bi, bj) == EMPTY)
-    return gtp_failure("dragon vertex must not be empty");
-
-  if (BOARD(ai, aj) != BOARD(bi, bj))
-    return gtp_failure("dragon vertices must have the same color");
-
-  silent_examine_position(EXAMINE_DRAGONS_WITHOUT_OWL);
-  
-  defense_code = owl_connection_defends(POS(ti, tj), POS(ai, aj), POS(bi, bj));
-  gtp_start_response(GTP_SUCCESS);
-  gtp_print_code(defense_code);
-  return gtp_finish_response();
-}
-
-
-/* Function:  Try to defend both of two strings
- * Arguments: two vertices
- * Fails:     invalid vertex, empty vertex
- * Returns:   defend code for the strings.  Guarantees there
- *            exists a move which will defend both of the two
- *            with defend_code, but does not return the move.
- */
-static int
-gtp_defend_both(char *s)
-{
-  int ai, aj;
-  int bi, bj;
-  int n;
-  int dcode;
-
-  n = gtp_decode_coord(s, &ai, &aj);
-  if (n == 0)
-    return gtp_failure("invalid coordinate");
-
-  if (BOARD(ai, aj) == EMPTY)
-    return gtp_failure("string vertex must be empty");
-
-  n = gtp_decode_coord(s + n, &bi, &bj);
-  if (n == 0)
-    return gtp_failure("invalid coordinate");
-
-  if (BOARD(bi, bj) == EMPTY)
-    return gtp_failure("string vertex must not be empty");
-
-  dcode = defend_both(POS(ai, aj), POS(bi, bj));
-
-  gtp_start_response(GTP_SUCCESS);
-  gtp_print_code(dcode);
-  return gtp_finish_response();
-}
-
-
-
-/* Function:  Determine whether capturing a string gives a living dragon
- * Arguments: vertex
- * Fails:     invalid vertex, empty vertex
- * Returns:   1 if dragon can live, 0 otherwise
- */
-static int
-gtp_owl_substantial(char *s)
-{
-  int i, j;
-  int result;
-  
-  if (!gtp_decode_coord(s, &i, &j))
-    return gtp_failure("invalid coordinate");
-
-  if (BOARD(i, j) == EMPTY)
-    return gtp_failure("vertex must not be empty");
-
-  silent_examine_position(EXAMINE_DRAGONS_WITHOUT_OWL);
-  
-  result = owl_substantial(POS(i, j));
-  return gtp_success("%d", result);
-}  
-
-
-/* Function:  Analyze a semeai
- * Arguments: dragona, dragonb
- * Fails:     invalid vertices, empty vertices
- * Returns:   semeai defense result, semeai attack result, semeai move
- */
-static int
-gtp_analyze_semeai(char *s)
-{
-  int i, j;
-  int k;
-  int dragona, dragonb;
-  int resulta, resultb, move, result_certain;
-  
-  k = gtp_decode_coord(s, &i, &j);
-
-  if (k == 0)
-    return gtp_failure("invalid coordinate");
-  dragona = POS(i, j);
-  if (BOARD(i, j) == EMPTY)
-    return gtp_failure("vertex must not be empty");
-
-  if (!gtp_decode_coord(s+k, &i, &j))
-    return gtp_failure("invalid coordinate");
-  dragonb = POS(i, j);
-  if (BOARD(i, j) == EMPTY)
-    return gtp_failure("vertex must not be empty");
-
-  silent_examine_position(EXAMINE_DRAGONS_WITHOUT_OWL);
-
-  owl_analyze_semeai(dragona, dragonb, &resulta, &resultb, &move,
-  		     &result_certain);
-  gtp_start_response(GTP_SUCCESS);
-  gtp_print_code(resulta);
-  gtp_printf(" ");
-  gtp_print_code(resultb);
-  gtp_mprintf(" %m", I(move), J(move));
-  if (!result_certain && report_uncertainty)
-    gtp_printf(" uncertain");
-
-  return gtp_finish_response();
-}  
-
-
-/* Function:  Analyze a semeai after a move have been made.
- * Arguments: color, vertex, dragona, dragonb
- * Fails:     invalid vertices
- * Returns:   semeai defense result, semeai attack result, semeai move
- */
-static int
-gtp_analyze_semeai_after_move(char *s)
-{
-  int i, j;
-  int color;
-  int move;
-  int k;
-  int dragona, dragonb;
-  int resulta, resultb, semeai_move, result_certain;
-  
-  k = gtp_decode_move(s, &color, &i, &j);
-  move = POS(i, j);
-  if (k == 0 || move == NO_MOVE)
-    return gtp_failure("invalid color or coordinate");
-  if (board[move] != EMPTY)
-    return gtp_failure("move vertex is not empty");
-  s += k;
-  
-  k = gtp_decode_coord(s, &i, &j);
-  if (k == 0)
-    return gtp_failure("invalid coordinate");
-  dragona = POS(i, j);
-  if (board[dragona] == EMPTY)
-    return gtp_failure("dragon vertex must not be empty");
-  s += k;
-
-  if (!gtp_decode_coord(s, &i, &j))
-    return gtp_failure("invalid coordinate");
-  dragonb = POS(i, j);
-  if (board[dragonb] == EMPTY)
-    return gtp_failure("dragon vertex must not be empty");
-
-  silent_examine_position(EXAMINE_DRAGONS_WITHOUT_OWL);
-
-  owl_analyze_semeai_after_move(move, color, dragona, dragonb,
-				&resulta, &resultb, &semeai_move,
-				&result_certain, 0);
-  gtp_start_response(GTP_SUCCESS);
-  gtp_print_code(resulta);
-  gtp_printf(" ");
-  gtp_print_code(resultb);
-  gtp_mprintf(" %m", I(semeai_move), J(semeai_move));
-  if (!result_certain && report_uncertainty)
-    gtp_printf(" uncertain");
-
-  return gtp_finish_response();
-}  
-
-
-/***********************
- * Connection reading. *
- ***********************/
-
-/* Function:  Try to connect two strings.
- * Arguments: vertex, vertex
- * Fails:     invalid vertex, empty vertex, vertices of different colors
- * Returns:   connect result followed by connect point if successful.
- */
-static int
-gtp_connect(char *s)
-{
-  int ai, aj;
-  int bi, bj;
-  int connect_move = PASS_MOVE;
-  int result;
-  int n;
-  
-  n = gtp_decode_coord(s, &ai, &aj);
-  if (n == 0)
-    return gtp_failure("invalid coordinate");
-
-  if (!gtp_decode_coord(s + n, &bi, &bj))
-    return gtp_failure("invalid coordinate");
-
-  if (BOARD(ai, aj) == EMPTY || BOARD(bi, bj) == EMPTY)
-    return gtp_failure("vertex must not be empty");
-
-  if (BOARD(ai, aj) != BOARD(bi, bj))
-    return gtp_failure("vertices must have same color");
-
-  result = string_connect(POS(ai, aj), POS(bi, bj), &connect_move);
-  gtp_start_response(GTP_SUCCESS);
-  gtp_print_code(result);
-  if (result != 0)
-    gtp_mprintf(" %m", I(connect_move), J(connect_move));
-
-  return gtp_finish_response();
-}  
-
-
-/* Function:  Try to disconnect two strings.
- * Arguments: vertex, vertex
- * Fails:     invalid vertex, empty vertex, vertices of different colors
- * Returns:   disconnect result followed by disconnect point if successful.
- */
-static int
-gtp_disconnect(char *s)
-{
-  int ai, aj;
-  int bi, bj;
-  int disconnect_move = PASS_MOVE;
-  int result;
-  int n;
-  
-  n = gtp_decode_coord(s, &ai, &aj);
-  if (n == 0)
-    return gtp_failure("invalid coordinate");
-
-  if (!gtp_decode_coord(s + n, &bi, &bj))
-    return gtp_failure("invalid coordinate");
-
-  if (BOARD(ai, aj) == EMPTY || BOARD(bi, bj) == EMPTY)
-    return gtp_failure("vertex must not be empty");
-
-  if (BOARD(ai, aj) != BOARD(bi, bj))
-    return gtp_failure("vertices must have same color");
-
-  result = disconnect(POS(ai, aj), POS(bi, bj), &disconnect_move);
-  gtp_start_response(GTP_SUCCESS);
-  gtp_print_code(result);
-  if (result != 0)
-    gtp_mprintf(" %m", I(disconnect_move), J(disconnect_move));
-
-  return gtp_finish_response();
-}  
-
-
-/* Function:  Try to break from string into area.
- * Arguments: vertex, vertices
- * Fails:     invalid vertex, empty vertex.
- * Returns:   result followed by break in point if successful.
- */
-static int
-gtp_break_in(char *s)
-{
-  int ai, aj;
-  int i, j;
-  signed char goal[BOARDMAX];
-  int break_move = PASS_MOVE;
-  int result;
-  int n;
-  int k;
-  
-  n = gtp_decode_coord(s, &ai, &aj);
-  if (n == 0)
-    return gtp_failure("invalid coordinate");
-
-  memset(goal, 0, BOARDMAX);
-  s += n;
-
-  for (k = 0; k < MAX_BOARD * MAX_BOARD; k++) {
-    n = gtp_decode_coord(s, &i, &j);
-    if (n > 0) {
-      goal[POS(i, j)] = 1;
-      s += n;
-    }
-    else if (sscanf(s, "%*s") != EOF)
-      return gtp_failure("invalid coordinate");
-    else
-      break;
-  }
-
-  if (BOARD(ai, aj) == EMPTY)
-    return gtp_failure("vertex must not be empty");
-
-  result = break_in(POS(ai, aj), goal, &break_move);
-  gtp_start_response(GTP_SUCCESS);
-  gtp_print_code(result);
-  if (result != 0)
-    gtp_mprintf(" %m", I(break_move), J(break_move));
-
-  return gtp_finish_response();
-}
-
-/* Function:  Try to block string from area.
- * Arguments: vertex, vertices
- * Fails:     invalid vertex, empty vertex.
- * Returns:   result followed by block point if successful.
- */
-static int
-gtp_block_off(char *s)
-{
-  int ai, aj;
-  int i, j;
-  signed char goal[BOARDMAX];
-  int block_move = PASS_MOVE;
-  int result;
-  int n;
-  int k;
-  
-  n = gtp_decode_coord(s, &ai, &aj);
-  if (n == 0)
-    return gtp_failure("invalid coordinate");
-
-  memset(goal, 0, BOARDMAX);
-  s += n;
-
-  for (k = 0; k < MAX_BOARD * MAX_BOARD; k++) {
-    n = gtp_decode_coord(s, &i, &j);
-    if (n > 0) {
-      goal[POS(i, j)] = 1;
-      s += n;
-    }
-    else if (sscanf(s, "%*s") != EOF)
-      return gtp_failure("invalid coordinate");
-    else
-      break;
-  }
-
-  if (BOARD(ai, aj) == EMPTY)
-    return gtp_failure("vertex must not be empty");
-
-  result = block_off(POS(ai, aj), goal, &block_move);
-  gtp_start_response(GTP_SUCCESS);
-  gtp_print_code(result);
-  if (result != 0)
-    gtp_mprintf(" %m", I(block_move), J(block_move));
-
-  return gtp_finish_response();
-}
-
-
-
-/********
- * eyes *
- ********/
-
-/* Function:  Evaluate an eye space
- * Arguments: vertex
- * Fails:     invalid vertex
- * Returns:   Minimum and maximum number of eyes. If these differ an
- *            attack and a defense point are additionally returned.
- *            If the vertex is not an eye space or not of unique color,
- *            a single -1 is returned.
- */
-
-static int
-gtp_eval_eye(char *s)
-{
-  int m, n;
-  struct eyevalue value;
-  int attack_point;
-  int defense_point;
-  int pos;
-
-  if (!gtp_decode_coord(s, &m, &n))
-    return gtp_failure("invalid coordinate");
-
-  silent_examine_position(EXAMINE_DRAGONS_WITHOUT_OWL);
-  
-  if (black_eye[POS(m, n)].color == BLACK) {
-    pos = black_eye[POS(m, n)].origin;
-    compute_eyes(pos, &value, &attack_point, &defense_point,
-		 black_eye, half_eye, 0);
-  }
-  else if (white_eye[POS(m, n)].color == WHITE) {
-    pos = white_eye[POS(m, n)].origin;
-    compute_eyes(pos, &value, &attack_point, &defense_point,
-		 white_eye, half_eye, 0);
-  }
-  else
-    /* Not an eye or not of unique color. */
-    return gtp_success("-1");
-
-  gtp_start_response(GTP_SUCCESS);
-  gtp_printf("%d %d", min_eyes(&value), max_eyes(&value));
-  if (eye_move_urgency(&value) > 0) {
-    gtp_printf(" ");
-    gtp_print_vertex(I(attack_point), J(attack_point));
-    gtp_printf(" ");
-    gtp_print_vertex(I(defense_point), J(defense_point));
-  }
-  return gtp_finish_response();
-}
-
-
-/*****************
- * dragon status *
- *****************/
-
-/* Function:  Determine status of a dragon.
- * Arguments: optional vertex
- * Fails:     invalid vertex, empty vertex
- * Returns:   status ("alive", "critical", "dead", or "unknown"),
- *            attack point, defense point. Points of attack and
- *            defense are only given if the status is critical.
- *            If no vertex is given, the status is listed for all
- *            dragons, one per row in the format "A4: alive".
- *
- * FIXME: Should be able to distinguish between life in seki
- *        and independent life. Should also be able to identify ko.
- */
-
-static int
-gtp_dragon_status(char *s)
-{
-  int i, j;
-  int str = NO_MOVE;
-  int pos;
-  int empty_response = 1;
-
-  if (gtp_decode_coord(s, &i, &j)) {
-    str = POS(i, j);
-    if (board[str] == EMPTY)
-      return gtp_failure("vertex must not be empty");
-  }
-  else if (sscanf(s, "%*s") != EOF)
-    return gtp_failure("invalid coordinate");
-
-  silent_examine_position(EXAMINE_DRAGONS);
-  
-  gtp_start_response(GTP_SUCCESS);
-
-  for (pos = BOARDMIN; pos < BOARDMAX; pos++) {
-    if (ON_BOARD(pos)
-	&& (pos == str
-	    || (str == NO_MOVE
-		&& board[pos] != EMPTY
-		&& dragon[pos].origin == pos))) {
-      if (str == NO_MOVE)
-	gtp_mprintf("%m: ", I(pos), J(pos));
-      
-      if (dragon[pos].status == ALIVE)
-	gtp_printf("alive\n");
-      else if (dragon[pos].status == DEAD)
-	gtp_printf("dead\n");
-      else if (dragon[pos].status == UNKNOWN)
-	gtp_printf("unknown\n");
-      else {
-	/* Only remaining possibility. */
-	assert(dragon[pos].status == CRITICAL); 
-	/* Status critical, need to return attack and defense point as well. */
-	gtp_mprintf("critical %m %m\n", 
-		    I(DRAGON2(pos).owl_attack_point),
-		    J(DRAGON2(pos).owl_attack_point),
-		    I(DRAGON2(pos).owl_defense_point),
-		    J(DRAGON2(pos).owl_defense_point));
-      }
-      empty_response = 0;
-    }
-  }
-
-  if (empty_response)
-    gtp_printf("\n");
-
-  gtp_printf("\n");
-  return GTP_OK;
-}
-
-
-/* Function:  Determine whether two stones belong to the same dragon.
- * Arguments: vertex, vertex
- * Fails:     invalid vertex, empty vertex
- * Returns:   1 if the vertices belong to the same dragon, 0 otherwise
- */
-
-static int
-gtp_same_dragon(char *s)
-{
-  int ai, aj;
-  int bi, bj;
-  int n;
-
-  n = gtp_decode_coord(s, &ai, &aj);
-  if (n == 0)
-    return gtp_failure("invalid coordinate");
-
-  if (!gtp_decode_coord(s + n, &bi, &bj))
-    return gtp_failure("invalid coordinate");
-
-  if (BOARD(ai, aj) == EMPTY || BOARD(bi, bj) == EMPTY)
-    return gtp_failure("vertex must not be empty");
-
-  silent_examine_position(EXAMINE_DRAGONS_WITHOUT_OWL);
-  
-  return gtp_success("%d", dragon[POS(ai, aj)].id == dragon[POS(bi, bj)].id);
-}
-
-
-/************************
- * Unconditional status *
- ************************/
-
-/* Function:  Determine the unconditional status of a vertex.
- * Arguments: vertex
- * Fails:     invalid vertex
- * Returns:   unconditional status ("undecided", "alive", "dead",
- *            "white_territory", "black_territory"). Occupied vertices can
- *            be undecided, alive, or dead. Empty vertices can be
- *            undecided, white territory, or black territory.
- */
-
-static int
-gtp_unconditional_status(char *s)
-{
-  int i, j;
-  enum dragon_status status;
-
-  if (!gtp_decode_coord(s, &i, &j))
-    return gtp_failure("invalid coordinate");
-
-  silent_examine_position(EXAMINE_WORMS);
-  
-  status = worm[POS(i, j)].unconditional_status;
-  if (status == UNKNOWN)
-    return gtp_success("undecided");
-  return gtp_success("%s", status_to_string(status));
-}
-
-
-/***********************
- * combination attacks *
- ***********************/
-
-/* Function:  Find a move by color capturing something through a
- *            combination attack.
- * Arguments: color
- * Fails:     invalid color
- * Returns:   Recommended move, PASS if no move found
- */
-
-static int
-gtp_combination_attack(char *s)
-{
-  int color;
-  int attack_point;
-  int n;
-
-  n = gtp_decode_color(s, &color);
-  if (!n)
-    return gtp_failure("invalid color");
-
-  silent_examine_position(EXAMINE_ALL);
-
-  if (!atari_atari(color, &attack_point, NULL, verbose))
-    attack_point = NO_MOVE;
-  
-  gtp_start_response(GTP_SUCCESS);
-  gtp_print_vertex(I(attack_point), J(attack_point));
-  return gtp_finish_response();
-}
-
-/* Function:  If color can capture something through a
- *            combination attack, list moves by the opponent of color
- *            to defend against this attack.
- * Arguments: color
- * Fails:     invalid color
- * Returns:   Recommended moves, PASS if no combination attack found.
- */
-
-static int
-gtp_combination_defend(char *s)
-{
-  int color;
-  signed char defense_points[BOARDMAX];
-  int pos;
-  int first = 1;
-  int n;
-
-  n = gtp_decode_color(s, &color);
-  if (!n)
-    return gtp_failure("invalid color");
-
-  silent_examine_position(EXAMINE_ALL);
-
-  memset(defense_points, 0, sizeof(defense_points));
-  if (!atari_atari(color, NULL, defense_points, verbose))
-    return gtp_success("PASS");
-  
-  gtp_start_response(GTP_SUCCESS);
-  for (pos = BOARDMIN; pos < BOARDMAX; pos++)
-    if (ON_BOARD(pos) && defense_points[pos]) {
-      if (!first)
-	gtp_printf(" ");
-      else
-	first = 0;
-      gtp_print_vertex(I(pos), J(pos));
-    }
-  
-  return gtp_finish_response();
-}
-
-/* Function:  Run atari_atari_confirm_safety().
- * Arguments: move, optional int
- * Fails:     invalid move
- * Returns:   success code, if failure also defending move
- */
-
-static int
-gtp_aa_confirm_safety(char *s)
-{
-  int color;
-  int i, j;
-  int n;
-  int minsize = 0;
-  int result;
-  int defense_point = NO_MOVE;
-  signed char saved_dragons[BOARDMAX];
-  signed char saved_worms[BOARDMAX];
-
-  n = gtp_decode_move(s, &color, &i, &j);
-  if (n == 0 || POS(i, j) == NO_MOVE)
-    return gtp_failure("invalid color or coordinate");
-
-  sscanf(s + n, "%d", &minsize);
-
-  genmove(color, NULL, NULL);
-  get_saved_dragons(POS(i, j), saved_dragons);
-  get_saved_worms(POS(i, j), saved_worms);
-  
-  if (!tryko(POS(i, j), color, NULL))
-    return gtp_failure("invalid move");
-  popgo();
-
-  result = atari_atari_confirm_safety(color, POS(i, j),
-				      &defense_point, minsize,
-				      saved_dragons, saved_worms);
-  
-  gtp_start_response(GTP_SUCCESS);
-  gtp_mprintf("%d", result);
-  if (result == 0)
-    gtp_mprintf(" %m", I(defense_point), J(defense_point));
-  
-  return gtp_finish_response();
-}
 
 
 /********************
@@ -2524,7 +1357,7 @@ gtp_reg_genmove(char *s)
    */
   set_random_seed(0);
   
-  move = genmove_conservative(color, NULL);
+  move = genmove(color, NULL, NULL);
 
   set_random_seed(saved_random_seed);
   gtp_start_response(GTP_SUCCESS);
@@ -2565,7 +1398,7 @@ gtp_gg_genmove(char *s)
   sscanf(s+n, "%u", &seed);
   set_random_seed(seed);
   
-  move = genmove_conservative(color, NULL);
+  move = genmove(color, NULL, NULL);
   set_random_seed(saved_random_seed);
   gtp_start_response(GTP_SUCCESS);
   gtp_print_vertex(I(move), J(move));
@@ -2622,7 +1455,7 @@ gtp_restricted_genmove(char *s)
    */
   set_random_seed(0);
   
-  move = genmove_restricted(color, allowed_moves);
+  move = genmove(color, NULL, NULL);
   set_random_seed(saved_random_seed);
   gtp_start_response(GTP_SUCCESS);
   gtp_print_vertex(I(move), J(move));
@@ -2674,29 +1507,6 @@ gtp_kgs_genmove_cleanup(char *s)
 }
 
 
-/* Function : List the move reasons for a move.
- * Arguments: vertex
- * Fails:   : invalid vertex, occupied vertex
- * Returns  : list of move reasons (may be empty)
- */
-
-static int
-gtp_move_reasons(char *s)
-{
-  int i, j;
-  if (!gtp_decode_coord(s, &i, &j))
-    return gtp_failure("invalid coordinate");
-
-  if (BOARD(i, j) != EMPTY)
-    return gtp_failure("vertex must not be occupied");
-
-  gtp_start_response(GTP_SUCCESS);
-  if (list_move_reasons(gtp_output_file, POS(i, j)) == 0)
-    gtp_printf("\n");
-  gtp_printf("\n");
-  return GTP_OK;
-}
-
 /* Function : Generate a list of all moves with values larger than zero in
  *            the previous genmove command.
  *            If no previous genmove command has been issued, the result
@@ -2711,7 +1521,8 @@ gtp_all_move_values(char *s)
 {
   UNUSED(s);
   gtp_start_response(GTP_SUCCESS);
-  print_all_move_values(gtp_output_file);
+//TODO
+//  print_all_move_values(gtp_output_file);
   gtp_printf("\n");
   return GTP_OK;
 }
@@ -2907,10 +1718,6 @@ gtp_time_left(char *s)
  ***********/
 
 static float final_score;
-static enum dragon_status final_status[MAX_BOARD][MAX_BOARD];
-static enum dragon_status status_numbers[6] = {ALIVE, DEAD, ALIVE_IN_SEKI,
-					       WHITE_TERRITORY,
-					       BLACK_TERRITORY, DAME};
 static const char *status_names[6] = {"alive", "dead", "seki",
 				      "white_territory", "black_territory",
 				      "dame"};
@@ -2960,7 +1767,7 @@ finish_and_score_game(int seed)
     next = OTHER_COLOR(get_last_player());
 
   do {
-    move = genmove_conservative(next, NULL);
+    move = genmove(next, NULL, NULL);
     gnugo_play_move(move, next);
     if (move != PASS_MOVE) {
       pass = 0;
@@ -2972,27 +1779,18 @@ finish_and_score_game(int seed)
     next = OTHER_COLOR(next);
   } while (pass < 2 && moves < board_size * board_size);
 
-  final_score = aftermath_compute_score(next, NULL);
-  for (i = 0; i < board_size; i++)
-    for (j = 0; j < board_size; j++) {
-      final_status[i][j] = aftermath_final_status(next, POS(i, j));
-      saved_board[i][j] = BOARD(i, j);
-    }
-
   restore_board(&saved_pos);
   doing_scoring = 0;
 
   /* Update the status for vertices which were changed while finishing
    * the game, up to filling dame.
    */
-  for (i = 0; i < board_size; i++)
+/*  for (i = 0; i < board_size; i++)
     for (j = 0; j < board_size; j++) {
       if (BOARD(i, j) == saved_board[i][j])
 	continue;
 
       if (BOARD(i, j) == EMPTY) {
-	if (final_status[i][j] == ALIVE
-	    || final_status[i][j] == ALIVE_IN_SEKI)
 	  final_status[i][j] = DAME;
 	else if (final_status[i][j] == DEAD) {
 	  if (saved_board[i][j] == BLACK)
@@ -3021,7 +1819,7 @@ finish_and_score_game(int seed)
 	else
 	  final_status[i][j] = DEAD;
       }
-    }
+    }*/
 }
 
 
@@ -3062,131 +1860,6 @@ gtp_final_score(char *s)
 }
 
 
-/* Function:  Report the final status of a vertex in a finished game.
- * Arguments: Vertex, optional random seed
- * Fails:     invalid vertex
- * Returns:   Status in the form of one of the strings "alive", "dead",
- *            "seki", "white_territory", "black_territory", or "dame".
- */
-static int
-gtp_final_status(char *s)
-{
-  int seed;
-  int n;
-  int ai, aj;
-  int k;
-  unsigned int saved_random_seed = get_random_seed();
-  const char *result = NULL;
-
-  n = gtp_decode_coord(s, &ai, &aj);
-  if (n == 0)
-    return gtp_failure("invalid coordinate");
-
-  /* This is intended for regression purposes and should therefore be
-   * deterministic. The best way to ensure this is to reset the random
-   * number generator before calling genmove(). By default it is
-   * seeded with 0, but if an optional unsigned integer is given in
-   * the command after the color, this is used as seed instead.
-   */
-  seed = 0;
-  sscanf(s + n, "%d", &seed);
-  set_random_seed(seed);
-
-  finish_and_score_game(seed);
-
-  set_random_seed(saved_random_seed);
-  for (k = 0; k < 6; k++)
-    if (final_status[ai][aj] == status_numbers[k]) {
-      result = status_names[k];
-      break;
-    }
-  assert(result != NULL);
-
-  return gtp_success(result);
-}
-
-
-/* Function:  Report vertices with a specific final status in a finished game.
- * Arguments: Status in the form of one of the strings "alive", "dead",
- *            "seki", "white_territory", "black_territory", or "dame".
- *            An optional random seed can be added.
- * Fails:     missing or invalid status string
- * Returns:   Vertices having the specified status. These are split with
- *            one string on each line if the vertices are nonempty (i.e.
- *            for "alive", "dead", and "seki").
- *
- * Status:    GTP version 2 standard command.
- *            However, "dame", "white_territory", and "black_territory"
- *            are private extensions.
- */
-static int
-gtp_final_status_list(char *s)
-{
-  int seed;
-  int n;
-  int i, j;
-  enum dragon_status status = UNKNOWN;
-  int k;
-  char status_string[GTP_BUFSIZE];
-  int first;
-  unsigned int saved_random_seed = get_random_seed();
-
-  if (sscanf(s, "%s %n", status_string, &n) != 1)
-    return gtp_failure("missing status");
-  
-  for (k = 0; k < 6; k++) {
-    if (strcmp(status_string, status_names[k]) == 0)
-      status = status_numbers[k];
-  }
-
-  if (status == UNKNOWN)
-    return gtp_failure("invalid status");
-
-  /* This is intended for regression purposes and should therefore be
-   * deterministic. The best way to ensure this is to reset the random
-   * number generator before calling genmove(). By default it is
-   * seeded with 0, but if an optional unsigned integer is given in
-   * the command after the color, this is used as seed instead.
-   */
-  seed = 0;
-  sscanf(s + n, "%d", &seed);
-  set_random_seed(seed);
-
-  finish_and_score_game(seed);
-
-  set_random_seed(saved_random_seed);
-
-  gtp_start_response(GTP_SUCCESS);
-
-  first = 1;
-  for (i = 0; i < board_size; i++)
-    for (j = 0; j < board_size; j++) {
-      if (final_status[i][j] != status)
-	continue;
-      if (BOARD(i, j) == EMPTY) {
-	if (!first)
-	  gtp_printf(" ");
-	else
-	  first = 0;
-	gtp_print_vertex(i, j);
-      }
-      else {
-	int num_stones;
-	int stones[MAX_BOARD * MAX_BOARD];
-	if (find_origin(POS(i, j)) != POS(i, j))
-	  continue;
-	if (!first)
-	  gtp_printf("\n");
-	else
-	  first = 0;
-	num_stones = findstones(POS(i, j), board_size * board_size, stones);
-	gtp_print_vertices2(num_stones, stones);
-      }
-    }
-
-  return gtp_finish_response();
-}
-
 /* Function:  Estimate the score
  * Arguments: None
  * Fails:     never
@@ -3210,42 +1883,6 @@ gtp_estimate_score(char *s)
     gtp_printf("B+%3.1f (upper bound: %3.1f, lower: %3.1f)", 
 	       -score, upper_bound, lower_bound);
   return gtp_finish_response();
-}  
-
-/* Function:  Estimate the score, taking into account which player moves next
- * Arguments: Color to play
- * Fails:     Invalid color
- * Returns:   Score.
- *
- * This function generates a move for color, then adds the
- * value of the move generated to the value of the position.
- * Critical dragons are awarded to the opponent since the
- * value of rescuing a critical dragon is taken into account
- * in the value of the move generated.
- */
-
-static int
-gtp_experimental_score(char *s)
-{
-  float upper_bound, lower_bound, score;
-  int color;
-
-  if (!gtp_decode_color(s, &color)
-      || (color != BLACK && color != WHITE))
-    return gtp_failure("invalid color");
-
-  genmove_conservative(color, NULL);
-  gnugo_estimate_score(&upper_bound, &lower_bound);
-
-  if (debug & DEBUG_SCORING)
-    fprintf(stderr, "upper = %3.1f, lower = %3.1f, best = %3.1f\n",
-	    upper_bound, lower_bound, best_move_values[0]);
-  if (color == WHITE)
-    score = lower_bound + best_move_values[0];
-  else
-    score = upper_bound - best_move_values[0];
-
-  return gtp_success("%3.1f", score);
 }  
 
 
@@ -3282,34 +1919,6 @@ gtp_get_life_node_counter(char *s)
 {
   UNUSED(s);
   return gtp_success("0");
-}
-
-
-/* Function:  Reset the count of owl nodes.
- * Arguments: none
- * Fails:     never
- * Returns:   nothing
- */
-static int
-gtp_reset_owl_node_counter(char *s)
-{
-  UNUSED(s);
-  reset_owl_node_counter();
-  return gtp_success("");
-}
-
-
-/* Function:  Retrieve the count of owl nodes.
- * Arguments: none
- * Fails:     never
- * Returns:   number of owl nodes
- */
-static int
-gtp_get_owl_node_counter(char *s)
-{
-  int nodes = get_owl_node_counter();
-  UNUSED(s);
-  return gtp_success("%d", nodes);
 }
 
 
@@ -3369,99 +1978,9 @@ gtp_get_trymove_counter(char *s)
 }
 
 
-/* Function:  Reset the count of connection nodes.
- * Arguments: none
- * Fails:     never
- * Returns:   nothing
- */
-static int
-gtp_reset_connection_node_counter(char *s)
-{
-  UNUSED(s);
-  reset_connection_node_counter();
-  return gtp_success("");
-}
-
-
-/* Function:  Retrieve the count of connection nodes.
- * Arguments: none
- * Fails:     never
- * Returns:   number of connection nodes
- */
-static int
-gtp_get_connection_node_counter(char *s)
-{
-  int nodes = get_connection_node_counter();
-  UNUSED(s);
-  return gtp_success("%d", nodes);
-}
-
-
-
 /*********
  * debug *
  *********/
-
-
-/* Function:  Test an eyeshape for inconsistent evaluations
- * Arguments: Eyeshape vertices
- * Fails:     Bad vertices
- * Returns:   Failure reports on stderr.
- */
-static int
-gtp_test_eyeshape(char *s)
-{
-  int n;
-  int i, j;
-  int eye_vertices[MAX_BOARD * MAX_BOARD];
-  int eyesize = 0;
-
-  n = gtp_decode_coord(s, &i, &j);
-  while (n > 0) {
-    eye_vertices[eyesize] = POS(i, j);
-    eyesize++;
-    s += n;
-    n = gtp_decode_coord(s, &i, &j);
-  }
-  
-  if (eyesize == 0)
-    return gtp_failure("invalid coordinate");
-
-  test_eyeshape(eyesize, eye_vertices);
-
-  return gtp_success("");
-}
-
-
-/* Function:  Compute an eyevalue and vital points for an eye graph
- * Arguments: Eyeshape encoded in string OR two integers followed by eyeshape
- * Fails:     Bad eyeshape, analysis failed
- * Returns:   Eyevalue, vital points
- */
-static int
-gtp_analyze_eyegraph(char *s)
-{
-  struct eyevalue value;
-  int outer_liberties;
-  int ko_threats;
-  int n = 0;
-  char analyzed_eyegraph[1024];
-  int result;
-
-  if (sscanf(s, "%d %d %n", &outer_liberties, &ko_threats, &n) < 2) {
-    outer_liberties = 4;
-    ko_threats = 1;
-  }
-
-  result = analyze_eyegraph(s + n, &value, analyzed_eyegraph,
-			    outer_liberties, ko_threats);
-
-  if (result == 0)
-    return gtp_failure("failed to analyze");
-
-  return gtp_success("%s\n%s", eyevalue_to_string(&value), analyzed_eyegraph);
-}
-
 
 
 /* Function:  Returns elapsed CPU time in seconds.
@@ -3517,151 +2036,6 @@ has_prefix(const char *s, const char *prefix)
   return strncmp(s, prefix, strlen(prefix)) == 0;
 }
 
-static int
-print_influence_data(struct influence_data *q, char *what_data)
-{
-  float white_influence[BOARDMAX];
-  float black_influence[BOARDMAX];
-  float white_strength[BOARDMAX];
-  float black_strength[BOARDMAX];
-  float white_attenuation[BOARDMAX]; 
-  float black_attenuation[BOARDMAX];
-  float white_permeability[BOARDMAX];
-  float black_permeability[BOARDMAX];
-  float territory_value[BOARDMAX];
-  int influence_regions[BOARDMAX];
-  int non_territory[BOARDMAX];
-  int m, n;
-  
-  float *float_pointer = NULL;
-  int *int_pointer = NULL;
-  
-  while (*what_data == ' ')
-    what_data++;
-
-  get_influence(q, white_influence, black_influence,
-		white_strength, black_strength,
-		white_attenuation, black_attenuation,
-		white_permeability, black_permeability,
-		territory_value, influence_regions, non_territory);
-
-  if (has_prefix(what_data, "white_influence"))
-    float_pointer = white_influence;
-  else if (has_prefix(what_data, "black_influence"))
-    float_pointer = black_influence;
-  else if (has_prefix(what_data, "white_strength"))
-    float_pointer = white_strength;
-  else if (has_prefix(what_data, "black_strength"))
-    float_pointer = black_strength;
-  else if (has_prefix(what_data, "white_attenuation"))
-    float_pointer = white_attenuation;
-  else if (has_prefix(what_data, "black_attenuation"))
-    float_pointer = black_attenuation;
-  else if (has_prefix(what_data, "white_permeability"))
-    float_pointer = white_permeability;
-  else if (has_prefix(what_data, "black_permeability"))
-    float_pointer = black_permeability;
-  else if (has_prefix(what_data, "territory_value"))
-    float_pointer = territory_value;
-  else if (has_prefix(what_data, "influence_regions"))
-    int_pointer = influence_regions;
-  else if (has_prefix(what_data, "non_territory"))
-    int_pointer = non_territory;
-  else
-    return gtp_failure("unknown influence data");
-  
-  gtp_start_response(GTP_SUCCESS);
-  for (m = 0; m < board_size; m++) {
-    for (n = 0; n < board_size; n++) {
-      if (float_pointer)
-	gtp_printf("%6.2f ", float_pointer[POS(m, n)]);
-      else
-	gtp_printf("%2d ", int_pointer[POS(m, n)]);
-    }
-    gtp_printf("\n");
-  }
-  
-  /* We already have one newline and thus can't use gtp_finish_response(). */
-  gtp_printf("\n");
-  return GTP_OK;
-}
-
-/* Function:  Return information about the initial influence function.
- * Arguments: color to move, what information
- * Fails:     never
- * Returns:   Influence data formatted like:
- *
- *   0.51   1.34   3.20   6.60   9.09   8.06   1.96   0.00   0.00 
- *   0.45   1.65   4.92  12.19  17.47  15.92   4.03   0.00   0.00 
- *                   .
- *                   .
- *                   .
- *   0.00   0.00   0.00   0.00   0.00 100.00  75.53  41.47  23.41
- *
- * The available choices of information are:
- * 
- * white_influence (float)
- * black_influence (float)
- * white_strength (float)
- * black_strength (float)
- * white_attenuation (float)
- * black_attenuation (float)
- * white_permeability (float)
- * black_permeability (float)
- * territory_value (float)
- * influence_regions (int)
- * non_territory (int)
- *
- * The encoding of influence_regions is as follows:
- *  4 white stone
- *  3 white territory
- *  2 white moyo
- *  1 white area
- *  0 neutral
- * -1 black area
- * -2 black moyo
- * -3 black territory
- * -4 black stone
- */
-static int
-gtp_initial_influence(char *s)
-{
-  int color;
-  struct influence_data *q;
-  int n;
-
-  n = gtp_decode_color(s, &color);
-  if (n == 0)
-    return gtp_failure("invalid color");
-
-  q = INITIAL_INFLUENCE(color);
-  
-  silent_examine_position(EXAMINE_ALL);
-
-  return print_influence_data(q, s + n);
-}
-
-
-/* Function:  Return information about the influence function after a move.
- * Arguments: move, what information
- * Fails:     never
- * Returns:   Influence data formatted like for initial_influence.
- */
-static int
-gtp_move_influence(char *s)
-{
-  int color;
-  int i, j;
-  int n;
-
-  n = gtp_decode_move(s, &color, &i, &j);
-  if (n == 0)
-    return gtp_failure("invalid move");
-
-  prepare_move_influence_debugging(POS(i, j), color);
-  
-  return print_influence_data(&move_influence, s + n);
-}
 
 
 /* Function:  List probabilities of each move being played (when non-zero).
@@ -3680,7 +2054,7 @@ gtp_move_probabilities(char *s)
 
   UNUSED(s);
 
-  compute_move_probabilities(probabilities);
+  memset(probabilities,0,BOARDMAX);
 
   gtp_start_response(GTP_SUCCESS);
   for (pos = BOARDMIN; pos < BOARDMAX; pos++) {
@@ -3715,7 +2089,7 @@ gtp_move_uncertainty(char *s)
 
   UNUSED(s);
 
-  compute_move_probabilities(probabilities);
+  memset(probabilities,0,BOARDMAX);
 
   gtp_start_response(GTP_SUCCESS);
   for (pos = BOARDMIN; pos < BOARDMAX; pos++) {
@@ -3731,366 +2105,6 @@ gtp_move_uncertainty(char *s)
   return GTP_OK;
 }
 
-
-
-/* Function:  Return information about the followup influence after a move.
- * Arguments: move, what information
- * Fails:     never
- * Returns:   Influence data formatted like for initial_influence.
- */
-static int
-gtp_followup_influence(char *s)
-{
-  int color;
-  int i, j;
-  int n;
-
-  n = gtp_decode_move(s, &color, &i, &j);
-  if (n == 0)
-    return gtp_failure("invalid move");
-
-  prepare_move_influence_debugging(POS(i, j), color);
-  
-  return print_influence_data(&followup_influence, s + n);
-}
-
-
-/* Function:  Return the information in the worm data structure.
- * Arguments: optional vertex
- * Fails:     never
- * Returns:   Worm data formatted like:
- *
- * A19:
- * color           black
- * size            10
- * effective_size  17.83
- * origin          A19
- * liberties       8
- * liberties2      15
- * liberties3      10
- * liberties4      8
- * attack          PASS
- * attack_code     0
- * lunch           B19
- * defend          PASS
- * defend_code     0
- * cutstone        2
- * cutstone2       0
- * genus           0
- * inessential     0
- * B19:
- * color           white
- * .
- * .
- * .
- * inessential     0
- * C19:
- * ...
- *
- * If an intersection is specified, only data for this one will be returned.
- */
-static int
-gtp_worm_data(char *s)
-{
-  int i = -1;
-  int j = -1;
-  int m, n;
-
-  if (sscanf(s, "%*c") >= 0 && !gtp_decode_coord(s, &i, &j))
-    return gtp_failure("invalid color or coordinate");
-
-  silent_examine_position(EXAMINE_WORMS);
-
-  gtp_start_response(GTP_SUCCESS);
-  
-  for (m = 0; m < board_size; m++)
-    for (n = 0; n < board_size; n++)
-      if (i == -1 || (m == i && n == j)) {
-	struct worm_data *w = &worm[POS(m, n)];
-	gtp_print_vertex(m, n);
-	gtp_printf(":\n");
-	gtp_mprintf("origin               %m\n",  I(w->origin), J(w->origin));
-	gtp_mprintf("color                %C\n",  w->color);
-	gtp_printf("size                 %d\n",   w->size);
-	gtp_printf("effective_size       %.2f\n", w->effective_size);
-	gtp_printf("liberties            %d\n",   w->liberties);
-	gtp_printf("liberties2           %d\n",   w->liberties2);
-	gtp_printf("liberties3           %d\n",   w->liberties3);
-	gtp_printf("liberties4           %d\n",   w->liberties4);
-	gtp_printf("attack_code          %d\n",   w->attack_codes[0]);
-	gtp_mprintf("attack_point         %m\n",  
-		    I(w->attack_points[0]), J(w->attack_points[0]));
-	gtp_printf("defense_code         %d\n",   w->defense_codes[0]);
-	gtp_mprintf("defense_point        %m\n",  
-		    I(w->defense_points[0]), J(w->defense_points[0]));
-	gtp_mprintf("lunch                %m\n",  
-		    I(w->lunch), J(w->lunch));
-	gtp_printf("cutstone             %d\n",   w->cutstone);
-	gtp_printf("cutstone2            %d\n",   w->cutstone2);
-	gtp_printf("genus                %d\n",   w->genus);
-	gtp_printf("inessential          %d\n",   w->inessential);
-	gtp_printf("invincible           %d\n",   w->invincible);
-	gtp_printf("unconditional_status %s\n",
-		   status_to_string(w->unconditional_status));
-      }
-  
-  gtp_printf("\n");
-  return GTP_OK;
-}
-
-/* Function:  List the stones of a worm
- * Arguments: the location, "BLACK" or "WHITE"
- * Fails:     if called on an empty or off-board location
- * Returns:   list of stones
- */
-static int
-gtp_worm_stones(char *s)
-{
-  int i = -1;
-  int j = -1;
-  int color = EMPTY;
-  int m, n;
-  int u, v;
-  int board_empty = 1;
-
-  if (sscanf(s, "%*c") >= 0) {
-    if (!gtp_decode_coord(s, &i, &j)
-	&& !gtp_decode_color(s, &color))
-      return gtp_failure("invalid coordinate");
-  }
-    
-  if (BOARD(i, j) == EMPTY)
-    return gtp_failure("worm_stones called on an empty vertex");
-
-  gtp_start_response(GTP_SUCCESS);
-  
-  for (u = 0; u < board_size; u++)
-    for (v = 0; v < board_size; v++) {
-      if (BOARD(u, v) == EMPTY
-	  || (color != EMPTY && BOARD(u, v) != color))
-	continue;
-      board_empty = 0;
-      if (find_origin(POS(u, v)) != POS(u, v))
-	continue;
-      if (ON_BOARD2(i, j) 
-	  && !same_string(POS(u, v), POS(i, j)))
-	continue;
-      for (m = 0; m < board_size; m++)
-	for (n = 0; n < board_size; n++)
-	  if (BOARD(m, n) != EMPTY
-	      && same_string(POS(m, n), POS(u, v)))
-	    gtp_mprintf("%m ", m, n);
-      gtp_printf("\n");
-    }
-  
-  if (board_empty) 
-    gtp_printf("\n"); /* in case no stones have been printed */
-  gtp_printf("\n");
-  return GTP_OK;
-}
-
-
-
-/* Function:  Return the cutstone field in the worm data structure.
- * Arguments: non-empty vertex
- * Fails:     never
- * Returns:   cutstone
- */
-static int
-gtp_worm_cutstone(char *s)
-{
-
-  int i, j;
-  if (!gtp_decode_coord(s, &i, &j))
-    return gtp_failure("invalid coordinate");
-
-  if (BOARD(i, j) == EMPTY)
-    return gtp_failure("vertex must not be empty");
-
-  silent_examine_position(EXAMINE_WORMS);
-
-  return gtp_success(" %d", worm[POS(i, j)].cutstone);
-}
-
-/* Function:  Return the information in the dragon data structure.
- * Arguments: optional intersection
- * Fails:     never
- * Returns:   Dragon data formatted in the corresponding way to gtp_worm_data.
- */
-static int
-gtp_dragon_data(char *s)
-{
-  int i = -1;
-  int j = -1;
-  int m, n;
-  int newline_needed = 0;
-
-  if (sscanf(s, "%*c") >= 0 && !gtp_decode_coord(s, &i, &j))
-    return gtp_failure("invalid coordinate");
-
-  if (stackp > 0)
-    return gtp_failure("dragon data unavailable when stackp > 0");
-
-  silent_examine_position(FULL_EXAMINE_DRAGONS);
-
-  gtp_start_response(GTP_SUCCESS);
-
-  if (ON_BOARD2(i, j) && BOARD(i, j) == EMPTY)
-    gtp_mprintf("%m empty\n", i, j);
-  else {
-    newline_needed = 1;
-    for (m = 0; m < board_size; m++)
-      for (n = 0; n < board_size; n++)
-	if ((m == i && n == j)
-	    || (i == -1
-		&& BOARD(m, n) != EMPTY
-		&& dragon[POS(m, n)].origin == POS(m, n))) {
-	  gtp_print_vertex(m, n);
-	  gtp_printf(":\n");
-	  report_dragon(gtp_output_file, POS(m, n));
-	  newline_needed = 0;
-	}
-  }
-  if (newline_needed)
-    gtp_printf("\n");
-  gtp_printf("\n");
-  return GTP_OK;
-}
-
-/* Function:  List the stones of a dragon
- * Arguments: the location
- * Fails:     if called on an empty or off-board location
- * Returns:   list of stones
- */
-static int
-gtp_dragon_stones(char *s)
-{
-  int i = -1;
-  int j = -1;
-  int color = EMPTY;
-  int m, n;
-  int u, v;
-
-  if (sscanf(s, "%*c") >= 0) {
-    if (!gtp_decode_coord(s, &i, &j)
-	&& !gtp_decode_color(s, &color))
-    return gtp_failure("invalid coordinate");
-  }
-
-  if (BOARD(i, j) == EMPTY)
-    return gtp_failure("dragon_stones called on an empty vertex");
-
-  silent_examine_position(EXAMINE_DRAGONS);
-
-  gtp_start_response(GTP_SUCCESS);
-
-  
-  for (u = 0; u < board_size; u++)
-    for (v = 0; v < board_size; v++) {
-      if (BOARD(u, v) == EMPTY
-	  || (color != EMPTY && BOARD(u, v) != color))
-	continue;
-      if (dragon[POS(u, v)].origin != POS(u, v))
-	continue;
-      if (ON_BOARD2(i, j) && dragon[POS(i, j)].origin != POS(u, v))
-	continue;
-      for (m = 0; m < board_size; m++)
-	for (n = 0; n < board_size; n++)
-	  if (dragon[POS(m, n)].origin == POS(u, v))
-	    gtp_mprintf("%m ", m, n);
-      gtp_printf("\n");
-    }
-  
-  gtp_printf("\n");
-  return GTP_OK;
-}
-
-/* Function:  Return the information in the eye data structure.
- * Arguments: color, vertex
- * Fails:     never
- * Returns:   eye data fields and values, one pair per row
- */
-static int
-gtp_eye_data(char *s)
-{
-  int color = EMPTY;
-  int i = -1;
-  int j = -1;
-  struct eye_data *e;
-
-  if (!gtp_decode_move(s, &color, &i, &j))
-    return gtp_failure("invalid color or coordinate");
-
-  if (stackp > 0)
-    return gtp_failure("eye data unavailable when stackp > 0");
-
-  silent_examine_position(EXAMINE_DRAGONS_WITHOUT_OWL);
-
-  gtp_start_response(GTP_SUCCESS);
-
-  if (color == BLACK)
-    e = &black_eye[POS(i, j)];
-  else
-    e = &white_eye[POS(i, j)];
-  
-  gtp_mprintf("origin               %m\n", I(e->origin), J(e->origin));
-  gtp_mprintf("color                %C\n", e->color);
-  gtp_printf("esize                %d\n", e->esize);
-  gtp_printf("msize                %d\n", e->msize);
-  gtp_printf("value                %s\n", eyevalue_to_string(&e->value));
-  gtp_printf("marginal             %d\n", e->marginal);
-  gtp_printf("neighbors            %d\n", e->neighbors);
-  gtp_printf("marginal_neighbors   %d\n", e->marginal_neighbors);
-  
-  gtp_printf("\n");
-  return GTP_OK;
-}
-
-
-/* Function:  Return the information in the half eye data structure.
- * Arguments: vertex
- * Fails:     never
- * Returns:   half eye data fields and values, one pair per row
- */
-static int
-gtp_half_eye_data(char *s)
-{
-  int i = -1;
-  int j = -1;
-  struct half_eye_data *h;
-  int k;
-
-  if (!gtp_decode_coord(s, &i, &j))
-    return gtp_failure("invalid coordinate");
-
-  if (stackp > 0)
-    return gtp_failure("half eye data unavailable when stackp > 0");
-
-  silent_examine_position(EXAMINE_DRAGONS_WITHOUT_OWL);
-
-  gtp_start_response(GTP_SUCCESS);
-
-  h = &half_eye[POS(i, j)];
-  
-  gtp_printf("value                %.2f\n", h->value);
-  if (h->type == HALF_EYE)
-    gtp_printf("type                 HALF_EYE\n");
-  else if (h->type == FALSE_EYE)
-    gtp_printf("type                 FALSE_EYE\n");
-  else
-    gtp_printf("type                 %d\n", h->type);
-  gtp_printf("num_attacks          %d\n", h->num_attacks);
-  for (k = 0; k < h->num_attacks; k++)
-    gtp_mprintf("attack_point[%d]      %m\n", k, I(h->attack_point[k]),
-		J(h->attack_point[k]));
-  gtp_printf("num_defenses         %d\n", h->num_defenses);
-  for (k = 0; k < h->num_defenses; k++)
-    gtp_mprintf("defense_point[%d]     %m\n", k, I(h->defense_point[k]),
-		J(h->defense_point[k]));
-  
-  gtp_printf("\n");
-  return GTP_OK;
-}
 
 
 static SGFTree gtp_sgftree;
@@ -4391,174 +2405,6 @@ gtp_advance_random_seed(char *s)
 
   return gtp_success("%d", get_random_seed());
 }
-
-/***************
- * surrounding *
- ***************/
-
-/* Function:  Determine if a dragon is surrounded
- * Arguments: vertex (dragon)
- * Fails:     invalid vertex, empty vertex
- * Returns:   1 if surrounded, 2 if weakly surrounded, 0 if not
- */
-static int
-gtp_is_surrounded(char *s)
-{
-  int i, j;
-  int n;
-
-  n = gtp_decode_coord(s, &i, &j);
-  if (n == 0)
-    return gtp_failure("invalid coordinate");
-
-  if (BOARD(i, j) == EMPTY)
-    return gtp_failure("dragon vertex must be nonempty");
-
-  silent_examine_position(EXAMINE_DRAGONS);
-  return gtp_success("%d", DRAGON2(POS(i, j)).surround_status);
-}
-
-/* Function:  Determine if a move surrounds a dragon
- * Arguments: vertex (move), vertex (dragon)
- * Fails:     invalid vertex, empty (dragon, nonempty (move)
- * Returns:   1 if (move) surrounds (dragon)
- */
-static int
-gtp_does_surround(char *s)
-{
-  int si, sj, di, dj;
-  int n;
-
-  n = gtp_decode_coord(s, &si, &sj);
-  if (n == 0)
-    return gtp_failure("invalid coordinate");
-
-  if (BOARD(si, sj) != EMPTY)
-    return gtp_failure("move vertex must be empty");
-
-  n = gtp_decode_coord(s + n, &di, &dj);
-  if (n == 0)
-    return gtp_failure("invalid coordinate");
-
-  if (BOARD(di, dj) == EMPTY)
-    return gtp_failure("dragon vertex must be nonempty");
-
-  silent_examine_position(EXAMINE_DRAGONS);
-  return gtp_success("%d", does_surround(POS(si, sj), POS(di, dj)));
-}
-
-/* Function:  Report the surround map for dragon at a vertex
- * Arguments: vertex (dragon), vertex (mapped location)
- * Fails:     invalid vertex, empty dragon
- * Returns:   value of surround map at (mapped location), or -1 if
- *            dragon not surrounded.
- */
-
-static int
-gtp_surround_map(char *s)
-{
-  int di, dj, mi, mj;
-  int n;
-
-  n = gtp_decode_coord(s, &di, &dj);
-  if (n == 0)
-    return gtp_failure("invalid coordinate");
-
-  if (BOARD(di, dj) == EMPTY)
-    return gtp_failure("dragon vertex must not be empty");
-
-  n = gtp_decode_coord(s + n, &mi, &mj);
-  if (n == 0)
-    return gtp_failure("invalid coordinate");
-
-  silent_examine_position(EXAMINE_DRAGONS);
-  return gtp_success("%d", surround_map(POS(di, dj), POS(mi, mj)));
-}
-
-/***************
- * search area *
- ***************/
-
-/* Function:  limit search, and establish a search diamond
- * Arguments: pos
- * Fails:     invalid value
- * Returns:   nothing
- */
-static int
-gtp_set_search_diamond(char *s)
-{
-  int i, j;
-
-  if (!gtp_decode_coord(s, &i, &j))
-    return gtp_failure("invalid coordinate");
-  
-  set_limit_search(1);
-  set_search_diamond(POS(i, j));
-  return gtp_success("");
-}
-
-/* Function:  unmark the entire board for limited search
- * Arguments: none
- * Fails:     never
- * Returns:   nothing
- */
-static int
-gtp_reset_search_mask(char *s)
-{
-  UNUSED(s);
-
-  reset_search_mask();
-  return gtp_success("");
-}
-  
-/* Function:  sets the global variable limit_search
- * Arguments: value
- * Fails:     invalid arguments
- * Returns:   nothing
- */
-static int
-gtp_limit_search(char *s)
-{
-  int value;
-
-  if (sscanf(s, "%d", &value) < 1)
-    return gtp_failure("invalid value for search limit");
-  set_limit_search(value);
-  return gtp_success("");
-}
-
-/* Function:  mark a vertex for limited search
- * Arguments: position
- * Fails:     invalid arguments
- * Returns:   nothing
- */
-static int
-gtp_set_search_limit(char *s)
-{
-  int i, j;
-
-  gtp_decode_coord(s, &i, &j);
-  set_search_mask(POS(i, j), 1);
-  return gtp_success("");
-}
-  
-/* Function:  Draw search area. Writes to stderr.
- * Arguments: none
- * Fails:     never
- * Returns:   nothing
- */
-static int
-gtp_draw_search_area(char *s)
-{
-  UNUSED(s);
-
-  gtp_start_response(GTP_SUCCESS);
-  gtp_printf("\n");
-  draw_search_area();
-  return gtp_finish_response();
-}
-
-
 
 /*
  * Local Variables:

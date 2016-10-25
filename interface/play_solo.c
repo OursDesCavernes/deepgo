@@ -83,7 +83,6 @@ play_solo(Gameinfo *gameinfo, int moves)
   memset(&totalstats, '\0', sizeof(totalstats));
   while (passes < 2 && --moves >= 0) {
     int move;
-    reset_owl_node_counter();
     move = genmove(gameinfo->to_move, &move_value, NULL);
 
     gnugo_play_move(move, gameinfo->to_move);
@@ -107,7 +106,6 @@ play_solo(Gameinfo *gameinfo, int moves)
     totalstats.read_result_entered      += stats.read_result_entered;
     totalstats.read_result_hits         += stats.read_result_hits;
     totalstats.trusted_read_result_hits += stats.trusted_read_result_hits;
-    total_owl_count                     += get_owl_node_counter();
   }
   t2 = gg_cputime();
   
@@ -181,7 +179,6 @@ load_and_analyze_sgf_file(Gameinfo *gameinfo)
 
 #define ESTIMATE  0
 #define FINISH    1
-#define AFTERMATH 2
 
 void 
 load_and_score_sgf_file(SGFTree *tree, Gameinfo *gameinfo, 
@@ -203,30 +200,7 @@ load_and_score_sgf_file(SGFTree *tree, Gameinfo *gameinfo,
   method = ESTIMATE;
   if (strcmp(scoringmode, "finish") == 0)
     method = FINISH;
-  else if (strcmp(scoringmode, "aftermath") == 0)
-    method = AFTERMATH;
 
-  /* For aftermath scoring we compress the previous moves to a static
-   * board position in the output sgf. This helps a lot when debugging
-   * scoring mistakes. We don't do this for the finish method,
-   * however, since users may be better served by having GNU Go's
-   * selfplay added to the original game record.
-   */
-  if (method == AFTERMATH) {
-    sgftree_clear(&local_tree);
-    /* Modify komi to compensate for captured stones. We start at a
-     * setup position and since there is no standard sgf property to
-     * tell the number of captured stones, a modified komi is the best
-     * available solution.
-     */
-    sgftreeCreateHeaderNode(&local_tree, board_size,
-			    komi + black_captured - white_captured, handicap);
-    sgffile_printboard(&local_tree);
-    sgfAddProperty(local_tree.lastnode, "PL",
-		   gameinfo->to_move == WHITE ? "W" : "B");
-    score_tree = &local_tree;
-  }
-  
   next = gameinfo->to_move;
   reset_engine();
   
@@ -234,7 +208,7 @@ load_and_score_sgf_file(SGFTree *tree, Gameinfo *gameinfo,
   if (method != ESTIMATE) {
     doing_scoring = 1;
     while (pass < 2) {
-      move = genmove_conservative(next, &move_value);
+      move = genmove(next, NULL, NULL);
       if (move != PASS_MOVE) {
 	pass = 0;
 	gprintf("%d %s move %1m\n", movenum,
@@ -255,10 +229,7 @@ load_and_score_sgf_file(SGFTree *tree, Gameinfo *gameinfo,
   }
   
   /* Calculate the score. */
-  if (method == AFTERMATH)
-    score = aftermath_compute_score(next, score_tree);
-  else
-    score = gnugo_estimate_score(NULL, NULL);
+  score = gnugo_estimate_score(NULL, NULL);
   
   if (score < 0.0) {
     sprintf(text, "Black wins by %1.1f points\n", -score);

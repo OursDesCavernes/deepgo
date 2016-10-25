@@ -68,7 +68,6 @@ static void ascii_count(Gameinfo *gameinfo);
 static void showcapture(char *line);
 static void showdefense(char *line);
 static void ascii_goto(Gameinfo *gameinfo, char *line);
-static void ascii_free_handicap(Gameinfo *gameinfo, char *handicap_string);
 
 /* If sgf game info is written can't reset parameters like handicap, etc. */
 static int sgf_initialized;
@@ -241,7 +240,7 @@ ascii_showboard(void)
 	pos_is_move = 128;
       else
 	pos_is_move = 0;
-      dead = (dragon_status(POS(i, j)) == DEAD) && showdead;
+      dead = ALIVE;
       switch (BOARD(i, j) + pos_is_move + last_pos_was_move) {
 	case EMPTY+128:
 	case EMPTY:
@@ -354,13 +353,12 @@ show_commands(void)
 enum commands {INVALID = -1, END, EXIT, QUIT, RESIGN, 
 	       PASS, MOVE, FORCE, SWITCH,
 	       PLAY, PLAYBLACK, PLAYWHITE,
-	       SETHANDICAP, FREEHANDICAP, SETBOARDSIZE, SETKOMI,
+	       SETHANDICAP, SETBOARDSIZE, SETKOMI,
 	       SETDEPTH,
                INFO, DISPLAY, SHOWBOARD, HELP, UNDO, COMMENT, SCORE,
-               CMD_DEAD, CMD_BACK, CMD_FORWARD, CMD_LAST,
+               CMD_BACK, CMD_FORWARD, CMD_LAST,
                CMD_CAPTURE, CMD_DEFEND,
-               CMD_HELPDEBUG, CMD_SHOWAREA, CMD_SHOWMOYO, CMD_SHOWTERRI,
-               CMD_GOTO, CMD_SAVE, CMD_LOAD, CMD_SHOWDRAGONS, CMD_LISTDRAGONS,
+               CMD_HELPDEBUG, CMD_GOTO, CMD_SAVE, CMD_LOAD,
 	       SETLEVEL, NEW, COUNT, CONTINUE
 };
 
@@ -393,17 +391,11 @@ get_command(char *command)
   if (!strncmp(command, "playblack", 9)) return PLAYBLACK;
   if (!strncmp(command, "playwhite", 9)) return PLAYWHITE;
   if (!strncmp(command, "showboard", 9)) return SHOWBOARD;
-  if (!strncmp(command, "showdragons", 9)) return CMD_SHOWDRAGONS;
-  if (!strncmp(command, "listdragons", 9)) return CMD_LISTDRAGONS;
   if (!strncmp(command, "boardsize", 9)) return SETBOARDSIZE;
-  if (!strncmp(command, "freehandicap", 9)) return FREEHANDICAP;
   if (!strncmp(command, "handicap", 5)) return SETHANDICAP;
   if (!strncmp(command, "display", 7)) return DISPLAY;
   if (!strncmp(command, "helpdebug", 7)) return CMD_HELPDEBUG;
   if (!strncmp(command, "resign", 6)) return RESIGN;
-  if (!strncmp(command, "showmoyo", 6)) return CMD_SHOWMOYO;
-  if (!strncmp(command, "showterri", 6)) return CMD_SHOWTERRI;
-  if (!strncmp(command, "showarea", 6)) return CMD_SHOWAREA;
   if (!strncmp(command, "depth", 5)) return SETDEPTH;
   if (!strncmp(command, "switch", 5)) return SWITCH;
   if (!strncmp(command, "komi", 4)) return SETKOMI;
@@ -419,7 +411,6 @@ get_command(char *command)
   if (!strncmp(command, "undo", 3)) return UNDO;
   if (!strncmp(command, "comment", 3)) return COMMENT;
   if (!strncmp(command, "score", 3)) return SCORE;
-  if (!strncmp(command, "dead", 3)) return CMD_DEAD;
   if (!strncmp(command, "capture", 3)) return CMD_CAPTURE;
   if (!strncmp(command, "defend", 3)) return CMD_DEFEND;
   if (!strncmp(command, "exit", 4)) return EXIT;
@@ -751,16 +742,6 @@ do_play_ascii(Gameinfo *gameinfo)
           gameinfo->to_move = (gameinfo->handicap ? WHITE : BLACK);
 	  break;
 
-	case FREEHANDICAP:
-	  if (sgf_initialized) {
-	    printf("Handicap cannot be changed after game is started!\n");
-	    break;
-	  }
-	  while (*command && *command != ' ')
-	    command++;
-	  ascii_free_handicap(gameinfo, command);
-	  break;
-
 	case SETKOMI:
 	  if (sgf_initialized) {
 	    printf("Komi cannot be modified after game record is started!\n");
@@ -902,11 +883,6 @@ do_play_ascii(Gameinfo *gameinfo)
 	    current_score_estimate = NO_SCORE;
 	  break;
 
-	case CMD_DEAD:
-	  silent_examine_position(FULL_EXAMINE_DRAGONS);
-	  showdead = !showdead;
-	  break;
-
 	case CMD_CAPTURE:
 	  strtok(command, " ");
 	  showcapture(strtok(NULL, " "));
@@ -915,32 +891,6 @@ do_play_ascii(Gameinfo *gameinfo)
 	case CMD_DEFEND:
 	  strtok(command, " ");
 	  showdefense(strtok(NULL, " "));
-	  break;
-
-	case CMD_SHOWMOYO:
-	  tmp = printmoyo;
-	  printmoyo = PRINTMOYO_MOYO;
-	  silent_examine_position(EXAMINE_DRAGONS);
-	  printmoyo = tmp;
-	  break;
-
-	case CMD_SHOWTERRI:
-	  tmp = printmoyo;
-	  printmoyo = PRINTMOYO_TERRITORY;
-	  silent_examine_position(EXAMINE_DRAGONS);
-	  printmoyo = tmp;
-	  break;
-
-	case CMD_SHOWAREA:
-	  tmp = printmoyo;
-	  printmoyo = PRINTMOYO_AREA;
-	  silent_examine_position(EXAMINE_DRAGONS);
-	  printmoyo = tmp;
-	  break;
-
-	case CMD_SHOWDRAGONS:
-	  silent_examine_position(EXAMINE_DRAGONS);
-	  showboard(1);
 	  break;
 
 	case CMD_GOTO:
@@ -985,11 +935,6 @@ do_play_ascii(Gameinfo *gameinfo)
 	  }
 	  else
 	    printf("Please specify a filename\n");
-	  break;
-
-	case CMD_LISTDRAGONS:
-	  silent_examine_position(EXAMINE_DRAGONS);
-	  show_dragons();
 	  break;
 
 	default:
@@ -1161,9 +1106,6 @@ ascii_count(Gameinfo *gameinfo)
       if (pos == NO_MOVE || board[pos] == EMPTY)
 	printf("\ninvalid!\n");
       else {
-	enum dragon_status status = dragon_status(pos);
-	status = (status == DEAD) ? ALIVE : DEAD;
-	change_dragon_status(pos, status);
 	ascii_showboard();
       }
     }
@@ -1232,83 +1174,6 @@ ascii_goto(Gameinfo *gameinfo, char *line)
   printf("goto %s\n", movenumber);
   gameinfo_play_sgftree(gameinfo, &sgftree, movenumber);
 }
-
-
-static void
-ascii_free_handicap(Gameinfo *gameinfo, char *handicap_string)
-{
-  int handi;
-  int i;
-  char line[80];
-  int stones[MAX_BOARD*MAX_BOARD];
-
-  if (sscanf(handicap_string, "%d", &handi) == 1) {
-    /* GNU Go is to place handicap */
-    if (handi < 0 || handi == 1) {
-      printf("\nInvalid command syntax!\n");
-      return;
-    }
-
-    clear_board();
-    handi = place_free_handicap(handi);
-    printf("\nPlaced %d stones of free handicap.\n", handi);
-  }
-  else { /* User is to place handicap */
-    clear_board();
-    handi = 0;
-
-    while (1) {
-      ascii_showboard();
-      printf("\nType in coordinates of next handicap stone, or one of the following commands:\n");
-      printf("  undo        take back the last stone placed\n");
-      printf("  clear       remove all the stones placed so far\n");
-      printf("  done        finish placing handicap\n\n");
-      printf("You have placed %d handicap stone(s) so far.\n\n", handi);
-
-      if (!fgets(line, 80, stdin))
-        return; /* EOF or some error */
-      for (i = 0; i < 80; i++)
-        line[i] = tolower((int) line[i]);
-
-      if (!strncmp(line, "undo", 4)) {
-        if (!handi)
-	  printf("\nNothing to undo.\n");
-	else {
-	  remove_stone(stones[--handi]);
-	  gprintf("\nRemoved the stone at %m.\n", I(stones[handi]),
-		  J(stones[handi]));
-	}
-      }
-      else if (!strncmp(line, "clear", 5)) {
-        clear_board();
-        handi = 0;
-      }
-      else if (!strncmp(line, "done", 4)) {
-	if (handi == 1) /* Don't bother with checks later */
-	  printf("\nHandicap cannot be one stone. Either add "
-		 "some more, or delete the only stone.\n");
-	else
-	  break;
-      }
-      else {
-	int pos = string_to_location(board_size, line);
-	if (pos != NO_MOVE) {
-	  if (board[pos] != EMPTY)
-	    printf("\nThere's already a stone there.\n");
-	  else {
-	    add_stone(pos, BLACK);
-	    stones[handi++] = pos;
-	  }
-	}
-	else
-	  printf("\nInvalid command: %s", line);
-      }
-    }
-  }
-  gameinfo->handicap = handi;
-  gameinfo->to_move = (handi ? WHITE : BLACK);
-}
-
 
 /*
  * Local Variables:
