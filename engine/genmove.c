@@ -72,13 +72,23 @@ reset_engine()
 int
 genmove(int color, float *value, int *resign)
 {
-  int move = PASS_MOVE;
+  int move = BOARDMIN;
   if (resign)
     *resign = 0;
 
+  while(move < BOARDMAX)
+  {
+    if(ON_BOARD(move) && (board[move] == EMPTY))
+    {
+      if(is_allowed_move(move,color))
+        return move;
+    }
+    move++;
+  }
+
   gg_assert(move == PASS_MOVE || ON_BOARD(move));
 
-  return move;
+  return PASS_MOVE;
 }
 
 
