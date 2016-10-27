@@ -47,12 +47,7 @@ init_gnugo(float memory, unsigned int seed)
   set_random_seed(HASH_RANDOM_SEED);
   reading_cache_init(memory * 1024 * 1024);
   set_random_seed(seed);
-  persistent_cache_init();
   clear_board();
-
-  transformation_init();
-  dfa_match_init();
-  choose_mc_patterns(NULL);
 
   clear_approxlib_cache();
   clear_accuratelib_cache();
@@ -187,7 +182,7 @@ gnugo_sethand(int desired_handicap, SGFNode *node)
 float
 gnugo_estimate_score(float *upper, float *lower)
 {
-  silent_examine_position(EXAMINE_DRAGONS);
+//  silent_examine_position(EXAMINE_DRAGONS);
   if (upper != NULL)
     *upper = white_score;
   if (lower != NULL)

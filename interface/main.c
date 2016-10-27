@@ -91,13 +91,6 @@ enum {OPT_BOARDSIZE = 127,
       OPT_GTP_VERSION,
       OPT_SHOWCOPYRIGHT,
       OPT_REPLAY_GAME,
-      OPT_DECIDE_STRING,
-      OPT_DECIDE_CONNECTION,
-      OPT_DECIDE_OWL,
-      OPT_DECIDE_DRAGON_DATA,
-      OPT_DECIDE_SEMEAI,
-      OPT_DECIDE_SURROUNDED,
-      OPT_DECIDE_ORACLE,
       OPT_EXPERIMENTAL_SEMEAI,
       OPT_EXPERIMENTAL_OWL_EXT,
       OPT_SEMEAI_NODE_LIMIT,
@@ -113,9 +106,6 @@ enum {OPT_BOARDSIZE = 127,
       OPT_STANDARD_SEMEAI,
       OPT_STANDARD_CONNECTIONS,
       OPT_PRINT_LEVELS,
-      OPT_DECIDE_POSITION,
-      OPT_DECIDE_EYE,
-      OPT_DECIDE_COMBINATION,
       OPT_BRANCH_DEPTH,
       OPT_BACKFILL2_DEPTH,
       OPT_BREAK_CHAIN_DEPTH,
@@ -132,13 +122,11 @@ enum {OPT_BOARDSIZE = 127,
       OPT_LEVEL,
       OPT_MIN_LEVEL,
       OPT_MAX_LEVEL,
-      OPT_LIMIT_SEARCH,
       OPT_SHOWTIME,
       OPT_SHOWSCORE,
       OPT_DEBUG_INFLUENCE,
       OPT_SCORE,
       OPT_PRINTSGF,
-      OPT_PROFILE_PATTERNS,
       OPT_CHINESE_RULES,
       OPT_OWL_THREATS,
       OPT_NO_OWL_THREATS,
@@ -160,7 +148,6 @@ enum {OPT_BOARDSIZE = 127,
       OPT_MONTE_CARLO,
       OPT_MC_GAMES_PER_LEVEL,
       OPT_MC_PATTERNS,
-      OPT_MC_LIST_PATTERNS,
       OPT_MC_LOAD_PATTERNS
 };
 
@@ -178,16 +165,6 @@ enum mode {
   MODE_LOAD_AND_PRINT,
   MODE_SOLO,
   MODE_REPLAY,
-  MODE_DECIDE_STRING,
-  MODE_DECIDE_CONNECTION,
-  MODE_DECIDE_OWL,
-  MODE_DECIDE_DRAGON_DATA,
-  MODE_DECIDE_SEMEAI,
-  MODE_DECIDE_POSITION,
-  MODE_DECIDE_EYE,
-  MODE_DECIDE_COMBINATION,
-  MODE_DECIDE_SURROUNDED,
-  MODE_DECIDE_ORACLE
 };
 
 
@@ -245,7 +222,6 @@ static struct gg_option const long_options[] =
   {"level",          required_argument, 0, OPT_LEVEL},
   {"min-level",      required_argument, 0, OPT_MIN_LEVEL},
   {"max-level",      required_argument, 0, OPT_MAX_LEVEL},
-  {"limit-search",   required_argument, 0, OPT_LIMIT_SEARCH},
   {"clock",          required_argument, 0, OPT_CLOCK_TIME},
   {"byo-time",       required_argument, 0, OPT_CLOCK_BYO_TIME},
   {"byo-period",     required_argument, 0, OPT_CLOCK_BYO_PERIOD},
@@ -282,17 +258,6 @@ static struct gg_option const long_options[] =
   {"statistics",     no_argument,       0, 'S'},
   {"trace",          no_argument,       0, 't'},
   {"seed",           required_argument, 0, 'r'},
-  {"decide-string",  required_argument, 0, OPT_DECIDE_STRING},
-  {"decide-connection", required_argument, 0, OPT_DECIDE_CONNECTION},
-  {"decide-dragon",  required_argument, 0, OPT_DECIDE_OWL},
-  {"decide-owl",     required_argument, 0, OPT_DECIDE_OWL},
-  {"decide-dragon-data",  required_argument, 0, OPT_DECIDE_DRAGON_DATA},
-  {"decide-semeai",  required_argument, 0, OPT_DECIDE_SEMEAI},
-  {"decide-position", no_argument,      0, OPT_DECIDE_POSITION},
-  {"decide-surrounded",  required_argument, 0, OPT_DECIDE_SURROUNDED},
-  {"decide-eye",     required_argument, 0, OPT_DECIDE_EYE},
-  {"decide-combination", no_argument,   0, OPT_DECIDE_COMBINATION},
-  {"decide-oracle",  no_argument,       0, OPT_DECIDE_ORACLE},
   {"nofusekidb",     no_argument,       0, OPT_NOFUSEKIDB},
   {"nofuseki",       no_argument,       0, OPT_NOFUSEKI},
   {"nojosekidb",     no_argument,       0, OPT_NOJOSEKIDB},
@@ -301,7 +266,6 @@ static struct gg_option const long_options[] =
   {"showscore",      no_argument,       0, OPT_SHOWSCORE},
   {"score",          required_argument, 0, OPT_SCORE},
   {"printsgf",       required_argument, 0, OPT_PRINTSGF},
-  {"profile-patterns", no_argument,     0, OPT_PROFILE_PATTERNS},
   {"mirror",         no_argument,       0, OPT_MIRROR},
   {"mirror-limit",   required_argument, 0, OPT_MIRROR_LIMIT},
   {"metamachine",    no_argument,       0, OPT_METAMACHINE},
@@ -310,7 +274,6 @@ static struct gg_option const long_options[] =
   {"monte-carlo",    no_argument,       0, OPT_MONTE_CARLO},
   {"mc-games-per-level", required_argument, 0, OPT_MC_GAMES_PER_LEVEL},
   {"mc-patterns",    required_argument, 0, OPT_MC_PATTERNS},
-  {"mc-list-patterns", no_argument,     0, OPT_MC_LIST_PATTERNS},
   {"mc-load-patterns", required_argument, 0, OPT_MC_LOAD_PATTERNS},
   {NULL, 0, NULL, 0}
 };
@@ -659,11 +622,6 @@ main(int argc, char *argv[])
 	strcpy(mc_pattern_name, gg_optarg);
 	break;
 
-      case OPT_MC_LIST_PATTERNS:
-	list_mc_patterns();
-	return EXIT_SUCCESS;
-	break;
-
       case OPT_MC_LOAD_PATTERNS:
 	if (strlen(gg_optarg) >= sizeof(mc_pattern_filename)) {
 	  fprintf(stderr, "Too long name given as value to --mc-load-patterns option.\n");
@@ -687,99 +645,6 @@ main(int argc, char *argv[])
 	  
 	  exit(EXIT_FAILURE);
 	}
-	break;
-	
-      case OPT_DECIDE_STRING:
-	if (strlen(gg_optarg) > 3) {
-	  fprintf(stderr, "Invalid board coordinate: %s\n", gg_optarg);
-	  exit(EXIT_FAILURE);
-	}
-	strcpy(decide_this, gg_optarg);
-	playmode = MODE_DECIDE_STRING;
-	break;
-	
-      case OPT_DECIDE_CONNECTION:
-	if (strlen(gg_optarg) > 7) {
-	  fprintf(stderr, 
-		  "usage: --decide-connection [first string]/[second string]\n");
-	  return EXIT_FAILURE;
-	}
-	strcpy(decide_this, gg_optarg);
-	strtok(decide_this, "/");
-	decide_that = strtok(NULL, "/");
-	if (!decide_that) {
-	  fprintf(stderr, 
-		  "usage: --decide-connection [first string]/[second string]\n");
-	  return EXIT_FAILURE;
-	}
-
-	playmode = MODE_DECIDE_CONNECTION;
-	break;
-	
-      case OPT_DECIDE_OWL:
-	if (strlen(gg_optarg) > 3) {
-	  fprintf(stderr, "Invalid board coordinate: %s\n", gg_optarg);
-	  exit(EXIT_FAILURE);
-	}
-	strcpy(decide_this, gg_optarg);
-	playmode = MODE_DECIDE_OWL;
-	break;
-	
-      case OPT_DECIDE_DRAGON_DATA:
-	if (strlen(gg_optarg) > 3) {
-	  fprintf(stderr, "Invalid board coordinate: %s\n", gg_optarg);
-	  exit(EXIT_FAILURE);
-	}
-	strcpy(decide_this, gg_optarg);
-	playmode = MODE_DECIDE_DRAGON_DATA;
-	break;
-	
-      case OPT_DECIDE_SEMEAI:
-	if (strlen(gg_optarg) > 7) {
-	  fprintf(stderr, 
-		  "usage: --decide-semeai [first dragon]/[second dragon]\n");
-	  return EXIT_FAILURE;
-	}
-	strcpy(decide_this, gg_optarg);
-	strtok(decide_this, "/");
-	decide_that = strtok(NULL, "/");
-	if (!decide_that) {
-	  fprintf(stderr, 
-		  "usage: --decide-semeai [first dragon]/[second dragon]\n");
-	  return EXIT_FAILURE;
-	}
-
-	playmode = MODE_DECIDE_SEMEAI;
-	break;
-	
-      case OPT_DECIDE_POSITION:
-	playmode = MODE_DECIDE_POSITION;
-	break;
-	
-      case OPT_DECIDE_EYE:
-	if (strlen(gg_optarg) > 3) {
-	  fprintf(stderr, "Invalid board coordinate: %s\n", gg_optarg);
-	  exit(EXIT_FAILURE);
-	}
-	strcpy(decide_this, gg_optarg);
-	playmode = MODE_DECIDE_EYE;
-	break;
-	
-      case OPT_DECIDE_COMBINATION:
-	playmode = MODE_DECIDE_COMBINATION;
-	break;
-	
-      case OPT_DECIDE_SURROUNDED:
-	if (strlen(gg_optarg) > 3) {
-	  fprintf(stderr, "Invalid board coordinate: %s\n", gg_optarg);
-	  exit(EXIT_FAILURE);
-	}
-	strcpy(decide_this, gg_optarg);
-	playmode = MODE_DECIDE_SURROUNDED;
-	break;
-	
-      case OPT_DECIDE_ORACLE:
-	playmode = MODE_DECIDE_ORACLE;
 	break;
 	
       case OPT_BRANCH_DEPTH:
@@ -842,17 +707,6 @@ main(int argc, char *argv[])
 	set_max_level(atoi(gg_optarg));
 	break;
 
-      case OPT_LIMIT_SEARCH:
-	{
-	  int pos = string_to_location(board_size, gg_optarg);
-	  if (pos == NO_MOVE) {
-	    fprintf(stderr, "gnugo: use --limit-search <pos>\n");
-	    return EXIT_FAILURE;
-	  }
-	  set_search_diamond(pos);
-	}
-	break;
-
       case OPT_CLOCK_TIME:
 	clock_settings(atoi(gg_optarg), -1, -1);
 	break;
@@ -901,11 +755,6 @@ main(int argc, char *argv[])
       case OPT_PRINTSGF:
 	playmode = MODE_LOAD_AND_PRINT;
 	printsgffile = gg_optarg;
-	break;
-	
-      case OPT_PROFILE_PATTERNS:
-	profile_patterns = 1;
-	prepare_pattern_profiling();
 	break;
 	
       case OPT_COLOR: 
@@ -997,23 +846,6 @@ main(int argc, char *argv[])
   /* Initialize the GNU Go engine. */
   init_gnugo(memory, seed);
 
-  /* Load Monte Carlo patterns if one has been specified. Either
-   * choose one of the compiled in ones or load directly from a
-   * database file.
-   */
-  if (strlen(mc_pattern_filename) > 0) {
-    if (!mc_load_patterns_from_db(mc_pattern_filename, NULL))
-      return EXIT_FAILURE;
-  }
-  else if (strlen(mc_pattern_name) > 0) {
-    if (!choose_mc_patterns(mc_pattern_name)) {
-      fprintf(stderr, "Unknown Monte Carlo pattern database name %s.\n",
-	      mc_pattern_name);
-      fprintf(stderr, "Use \"--mc-list-patterns\" to list the available databases.\n");
-      return EXIT_FAILURE;
-    }
-  }
-
   /* Read the infile if there is one. Also play up the position. */
   if (infilename) {
     if (!sgftree_readfile(&sgftree, infilename)) {
@@ -1035,13 +867,6 @@ main(int argc, char *argv[])
    * newly created empty sgf tree.
    */
   gameinfo.game_record = sgftree;
-  
-  /* Notice that we need to know the board size before we can do this.
-   */
-  if (debuginfluence_move[0]) {
-    int pos = string_to_location(board_size, debuginfluence_move);
-    debug_influence_move(pos);
-  }
   
   /* Figure out a default mode if there was no explicit one. */
   if (playmode == MODE_UNKNOWN) {
@@ -1067,19 +892,9 @@ main(int argc, char *argv[])
     /* not supported by the protocol */
     resign_allowed = 0;
 
-#if ORACLE
-    if (metamachine)
-      summon_oracle();
-#endif
-
     /* EMPTY is valid for play_gmp.c. */
     gameinfo.computer_player = mandated_color;
     play_gmp(&gameinfo, playmode == MODE_SGMP);
-
-#if ORACLE
-    if (metamachine)
-      dismiss_oracle();
-#endif
 
     break;
     
@@ -1144,191 +959,6 @@ main(int argc, char *argv[])
     }
     break;
     
-  case MODE_DECIDE_STRING:
-    {
-      int str;
-      
-      if (!infilename) {
-	fprintf(stderr, "gnugo: --decide-string must be used with -l\n");
-	return EXIT_FAILURE;
-      }
-
-      str = string_to_location(board_size, decide_this); 
-      if (str == NO_MOVE) {
-	fprintf(stderr, "gnugo: --decide-string: strange coordinate \n");
-	return EXIT_FAILURE;
-      }
-
-      decide_string(str);
-    }
-    break;
-  
-  case MODE_DECIDE_CONNECTION:
-    {
-      int str1, str2;
-      
-      if (!infilename) {
-	fprintf(stderr, "gnugo: --decide-connection must be used with -l\n");
-	return EXIT_FAILURE;
-      }
-
-      str1 = string_to_location(board_size, decide_this);
-      if (str1 == NO_MOVE) {
-	fprintf(stderr,
-		"usage: --decide-connection [first string]/[second string]\n");
-	return EXIT_FAILURE;
-      }
-
-      str2 = string_to_location(board_size, decide_that);
-      if (str2 == NO_MOVE) {
-	fprintf(stderr,
-		"usage: --decide-connection [first string]/[second string]\n");
-	return EXIT_FAILURE;
-      }
-
-      decide_connection(str1, str2);
-    }
-    break;
-  
-  case MODE_DECIDE_OWL:
-    {
-      int pos;
-      
-      if (!infilename) {
-	fprintf(stderr, "gnugo: --decide-dragon must be used with -l\n");
-	return EXIT_FAILURE;
-      }
-
-      pos = string_to_location(board_size, decide_this);
-      if (pos == NO_MOVE) {
-	fprintf(stderr, "gnugo: --decide-dragon: strange coordinate \n");
-	return EXIT_FAILURE;
-      }
-
-      decide_owl(pos);
-    }
-    break;
-  
-  case MODE_DECIDE_DRAGON_DATA:
-    {
-      int pos;
-      
-      if (!infilename) {
-	fprintf(stderr, "gnugo: --decide-dragon-data must be used with -l\n");
-	return EXIT_FAILURE;
-      }
-
-      pos = string_to_location(board_size, decide_this);
-      if (pos == NO_MOVE) {
-	fprintf(stderr, "gnugo: --decide-dragon-data: strange coordinate \n");
-	return EXIT_FAILURE;
-      }
-
-      decide_dragon_data(pos);
-    }
-    break;
-  
-  case MODE_DECIDE_SEMEAI:
-    {
-      int pos1, pos2;
-      
-      if (!infilename) {
-	fprintf(stderr, "gnugo: --decide-semeai must be used with -l\n");
-	return EXIT_FAILURE;
-      }
-
-      pos1 = string_to_location(board_size, decide_this);
-      if (pos1 == NO_MOVE) {
-	fprintf(stderr, 
-		"usage: --decide-semeai [first dragon]/[second dragon]\n");
-	return EXIT_FAILURE;
-      }
-
-      pos2 = string_to_location(board_size, decide_that);
-      if (pos2 == NO_MOVE) {
-	fprintf(stderr, 
-		"usage: --decide-semeai [first dragon]/[second dragon]\n");
-	return EXIT_FAILURE;
-      }
-
-      decide_semeai(pos1, pos2);
-    }
-    break;
-    
-
-  case MODE_DECIDE_POSITION:
-    {
-      if (!infilename) {
-	fprintf(stderr, "gnugo: --decide-position must be used with -l\n");
-	return EXIT_FAILURE;
-      }
-      decide_position();
-    }
-    break;
-    
-  case MODE_DECIDE_EYE:
-    {
-      int pos;
-      
-      if (!infilename) {
-	fprintf(stderr, "gnugo: --decide-eye must be used with -l\n");
-	return EXIT_FAILURE;
-      }
-
-      pos = string_to_location(board_size, decide_this);
-      if (pos == NO_MOVE) {
-	fprintf(stderr, "gnugo: --decide-eye: strange coordinate \n");
-	return EXIT_FAILURE;
-      }
-      
-      decide_eye(pos);
-    }
-    break;
-  
-  case MODE_DECIDE_COMBINATION:
-    {
-      int color;
-      if (!infilename) {
-	fprintf(stderr, "gnugo: --decide-combination must be used with -l\n");
-	return EXIT_FAILURE;
-      }
-      color = gameinfo.to_move;
-      if (mandated_color != EMPTY)
-	color = mandated_color;
-      decide_combination(color);
-    }
-    break;
-    
-  case MODE_DECIDE_SURROUNDED:
-    {
-      int pos = string_to_location(board_size, decide_this);
-
-      if (pos == NO_MOVE) {
-	fprintf(stderr, 
-		"usage: --decide-surrounded [pos]\n");
-	return EXIT_FAILURE;
-      }
-
-      decide_surrounded(pos);
-      break;
-    }
-
-#if ORACLE
-  case MODE_DECIDE_ORACLE:
-    {
-      if (mandated_color != EMPTY)
-	gameinfo.to_move = mandated_color;
-      
-      if (!infilename) {
-	fprintf(stderr, "You must use -l infile with load and analyze mode.\n");
-	exit(EXIT_FAILURE);
-      }
-
-      decide_oracle(&gameinfo, infilename, untilstring);
-      break;
-    }
-#endif
-
   case MODE_GTP:
     {
       FILE *gtp_input_FILE = stdin;
@@ -1416,9 +1046,6 @@ main(int argc, char *argv[])
     break;
   }
   
-  if (profile_patterns)
-    report_pattern_profiling();
-
   sgfFreeNode(sgftree.root); 
 
   return 0;

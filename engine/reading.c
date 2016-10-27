@@ -363,11 +363,6 @@ attack(int str, int *move)
     return 0;
 
   origin = find_origin(str);
-  if (search_persistent_reading_cache(ATTACK, origin, &result, &the_move)) {
-    if (move)
-      *move = the_move;
-    return result;
-  }
 
   memset(shadow, 0, sizeof(shadow));
   result = do_attack(str, &the_move);
@@ -386,8 +381,6 @@ attack(int str, int *move)
     }
   }
 
-  store_persistent_reading_cache(ATTACK, origin, result, the_move, nodes);
-  
   if (move)
     *move = the_move;
 
@@ -433,12 +426,6 @@ find_defense(int str, int *move)
   }
 
   origin = find_origin(str);
-  if (search_persistent_reading_cache(FIND_DEFENSE, origin, 
-				      &result, &the_move)) {
-    if (move)
-      *move = the_move;
-    return result;
-  }
 
   memset(shadow, 0, sizeof(shadow));
   result = do_find_defense(str, &the_move);
@@ -456,9 +443,6 @@ find_defense(int str, int *move)
       dump_stack();
     }
   }
-
-  store_persistent_reading_cache(FIND_DEFENSE, origin, result, 
-				 the_move, nodes);
   
   if (move)
     *move = the_move;

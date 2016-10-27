@@ -4,7 +4,7 @@ INCLUDE_DIRECTORIES(${DeepGo_SOURCE_DIR}/utils)
 
 ########### gnugo executable ###############
 
-SET(gnugo_SRCS
+SET(deepgo_SRCS
     main.c
     play_ascii.c
     play_gmp.c
@@ -15,7 +15,7 @@ SET(gnugo_SRCS
     gtp.c
     )
 
-ADD_EXECUTABLE(gnugo ${gnugo_SRCS})
+ADD_EXECUTABLE(deepgo ${deepgo_SRCS})
 
 IF(WIN32)
     SET(PLATFORM_LIBRARIES wsock32)
@@ -25,6 +25,6 @@ IF(UNIX)
     SET(PLATFORM_LIBRARIES m)
 ENDIF(UNIX)
 
-TARGET_LINK_LIBRARIES(gnugo sgf engine sgf utils patterns ${PLATFORM_LIBRARIES})
+TARGET_LINK_LIBRARIES(deepgo sgf engine sgf utils ${PLATFORM_LIBRARIES})
 
-INSTALL(TARGETS gnugo DESTINATION bin)
+INSTALL(TARGETS deepgo DESTINATION bin)
