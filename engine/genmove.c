@@ -21,11 +21,15 @@
  * Boston, MA 02111, USA.                                            *
 \* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+#define _GNU_SOURCE
+
 #include "gnugo.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <fcntl.h>
+#include <unistd.h>
 
 #include "liberty.h"
 #include "sgftree.h"
@@ -37,12 +41,9 @@
  */
 #define NEEDS_UPDATE(x) (x != position_number ? (x = position_number, 1) : 0)
 
-
-static int do_genmove(int color, float pure_threat_value,
-		      int allowed_moves[BOARDMAX], float *value, int *resign);
-
-/* Position numbers for which various examinations were last made. */
-
+int dclto;
+int dclfr;
+int dclpid = 0;
 
 /* Reset some things in the engine. 
  *
@@ -60,8 +61,139 @@ reset_engine()
 
   /* Set up depth values (see comments there for details). */
   set_depth_values(get_level(), 0);
+  if(dclpid == 0)
+  	deepcl_init();
+  else
+  {
+  	wait(dclpid);
+	deepcl_init();
+  }
 }
 
+
+
+int
+deepcl_init()
+{
+	int _dclto[2],_dclfr[2];
+	int dim[3];
+	if(pipe2(_dclto,O_DIRECT))
+		return -1;
+	if(pipe2(_dclfr,O_DIRECT))
+		return -1;
+	dclpid = fork();
+	switch(dclpid)
+	{
+		case -1:
+			return -1;
+		case 0:
+			close(_dclto[1]);
+			close(_dclfr[0]);
+			dup2(_dclto[0],STDIN_FILENO);
+			close(_dclto[0]);
+			dup2(_dclfr[1],STDOUT_FILENO);
+			close(_dclfr[1]);
+			execlp("deepcl_predict", "weightsfile=/home/thomas/deepcl/kgsgo/go_weights.dat", "batchsize=1", "outputformat=binary", (char*) NULL);
+			return -1;
+		default:
+			close(_dclto[0]);
+			close(_dclfr[1]);
+			dclto=_dclto[1];
+			dclfr=_dclfr[0];
+			dim[0]=8; //numplanes
+			dim[1]=19; //numplanes
+			dim[2]=19; //numplanes
+			write(dclto,(char*)dim,3*4l);
+			return 0;
+	}
+}
+
+
+/* 
+ * Get probabilities from NN.
+ *
+ * Return probabilities.
+ */
+
+int
+deepcl_get_probs(float* probs,Intersection* lboard, int color )
+{
+	float b[19*19*8] = { 0 };
+	int i,j,pos,libs =3;
+//	memset(b,0,sizeof(float)*19*19*8);
+	for(i=0;i<19;i++)
+	{
+		for(j=0;j<19;j++)
+		{
+			pos = POS(i, j);
+			b[i*19*8+j*8+7]=255;
+			if(board[pos]==color)
+			{
+				libs = countlib(pos);
+				if(libs == 1)
+					b[i*19*8+j*8]=255;
+				else if(libs == 1)
+					b[i*19*8+j*8+1]=255;
+				else
+					b[i*19*8+j*8+2]=255;
+			}
+			else if(board[pos]==OTHER_COLOR(color))
+			{
+				libs = countlib(pos);
+				if(libs == 1)
+					b[i*19*8+j*8+3]=255;
+				else if(libs == 1)
+					b[i*19*8+j*8+4]=255;
+				else
+					b[i*19*8+j*8+5]=255;
+			}
+			else if(pos == board_ko_pos )
+				b[i*19*8+j*8+6]=255;
+
+
+		}
+	}
+
+	write(dclto,(char*)b,19*19*8*4l);
+	printf("toto\n");
+	read(dclto,probs,19*19*4l);
+
+	return 0;
+}
+
+
+
+/* 
+ * Get probabilities from NN.
+ *
+ * Return probabilities.
+ */
+
+int
+weighted_rand_move(float* probs)
+{
+	double sum = 0;
+	int i;
+	float prob;
+
+	for(i=0;i<19*19;i++)
+	{
+		if(probs[i] != probs[i] || probs[i] < 0)
+			probs[i] = 0;
+		sum += probs[i];
+	}
+
+	prob = (float)rand()*sum/(RAND_MAX);
+	printf("prob: %1.0e, sum: %1.0e\n",prob, sum);
+	sum=0;
+	for(i=0;i<19*19;i++)
+	{
+		sum += probs[i];
+		if(prob<sum)
+			return POS(i/19,i%19);
+	}
+	return -1;
+}
 
 /* 
  * Generate computer move for color.
@@ -72,24 +204,33 @@ reset_engine()
 int
 genmove(int color, float *value, int *resign)
 {
-  int move = BOARDMIN;
+  int move = PASS_MOVE;
+  int tmp_move, i;
+  float probs[19*19];
   if (resign)
     *resign = 0;
 
-  while(move < BOARDMAX)
+  deepcl_get_probs(probs, board, color);
+
+  for(i=0;i<10;i++)
   {
-    if(ON_BOARD(move) && (board[move] == EMPTY))
+    tmp_move = weighted_rand_move(probs);
+  printf("genmove round %i, move %i\n",i,tmp_move);
+    if(ON_BOARD(tmp_move) && (board[tmp_move] == EMPTY) && (tmp_move != -1))
     {
-      if(is_allowed_move(move,color))
-        return move;
+      if(is_allowed_move(tmp_move,color))
+      {
+        move = tmp_move;
+	break;
+      }
     }
-    move++;
   }
 
   gg_assert(move == PASS_MOVE || ON_BOARD(move));
-
-  return PASS_MOVE;
+  return move;
 }
+
+
 
 
 /*
