@@ -602,7 +602,7 @@ play_ascii(SGFTree *tree, Gameinfo *gameinfo, char *filename, char *until)
     }
     sgf_initialized = 0;
   }
-
+  reset_engine();
   do_play_ascii(gameinfo);
   printf("\nThanks! for playing GNU Go.\n\n");
 
