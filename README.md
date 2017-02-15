@@ -8,9 +8,11 @@ Very Very early ...
 DeepCL with successfull unit tests.
 A trained neural network following [kgsgo-dataset-preprocessor](https://github.com/hughperkins/kgsgo-dataset-preprocessor) input and output format.
 ## Build
-`mkdir build && cd build`
-`cmake ..`
-`make`
+```
+$ mkdir build && cd build
+$ cmake ..
+$ make
+```
 ## Install
 Useless at the moment ...
 
